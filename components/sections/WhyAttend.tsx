@@ -93,24 +93,13 @@ function WhyAttendCard({ title, description, icon: Icon, color, glow, borderGlow
       y: 0,
       transition: {
         duration: 0.6,
-        ease: [0.16, 1, 0.3, 1],
+        ease: [0.16, 1, 0.3, 1] as const,
         delay: index * 0.08,
       },
     },
-  };
+  } as const;
 
-  const iconBounceAnimation = shouldReduceMotion
-    ? {}
-    : {
-        animate: {
-          scale: isHovered ? 1.05 : 1,
-          rotate: isHovered ? [0, -3, 3, 0] : 0,
-        },
-        transition: {
-          duration: 0.4,
-          ease: "easeInOut",
-        },
-      };
+  // Removed iconBounceAnimation in favor of inline type-safe animation props
 
   return (
     <motion.div
@@ -142,7 +131,17 @@ function WhyAttendCard({ title, description, icon: Icon, color, glow, borderGlow
       <div className="relative z-10 glass-card bg-card/60 rounded-[15px] p-6 h-full flex flex-col items-start border-none">
         
         {/* Glowing Large Icon */}
-        <motion.div {...(isHovered ? iconBounceAnimation : {})} className="mb-5">
+        <motion.div
+          animate={{
+            scale: !shouldReduceMotion && isHovered ? 1.05 : 1,
+            rotate: !shouldReduceMotion && isHovered ? [0, -3, 3, 0] : 0,
+          }}
+          transition={{
+            duration: 0.4,
+            ease: "easeInOut",
+          }}
+          className="mb-5"
+        >
           <IconWrapper variant={color} size="md" className={cn(
             "shadow-sm transition-all duration-300",
             isHovered ? (
@@ -182,7 +181,7 @@ export function WhyAttend() {
           gradientVariant="purple-pink"
           subtitle="Unlock new opportunities, elevate your cloud knowledge, and fast-track your tech career."
           badge="Empower Your Journey"
-          badgeVariant="orange"
+          badgeVariant="aws"
         />
 
         {/* 6 Cards Grid */}

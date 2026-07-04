@@ -84,18 +84,7 @@ function HighlightCard({ title, description, icon: Icon, color, glow, borderGlow
     },
   };
 
-  const iconFloatAnimation = shouldReduceMotion
-    ? {}
-    : ({
-        animate: {
-          y: isHovered ? [0, -6, 0] : 0,
-        },
-        transition: {
-          duration: 3,
-          repeat: Infinity,
-          ease: "easeInOut",
-        },
-      } as const);
+
 
   return (
     <motion.div
@@ -127,7 +116,11 @@ function HighlightCard({ title, description, icon: Icon, color, glow, borderGlow
       <div className="relative z-10 glass-card bg-card/65 rounded-[15px] p-7 h-full flex flex-col items-start border-none">
         
         {/* Floating Icon Wrapper */}
-        <motion.div {...(isHovered ? iconFloatAnimation : {})} className="mb-6">
+        <motion.div
+          animate={!shouldReduceMotion && isHovered ? { y: [0, -6, 0] } : { y: 0 }}
+          transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+          className="mb-6"
+        >
           <IconWrapper variant={color} size="lg" className={cn(
             "shadow-md transition-all duration-300",
             isHovered ? (
@@ -177,7 +170,7 @@ export function EventHighlights() {
           gradientVariant="aws"
           subtitle="Discover what makes the AWS Student Community Day Yavatmal an unmissable technology conference."
           badge="What to Expect"
-          badgeVariant="purple"
+          badgeVariant="default"
         />
 
         {/* Highlights Cards Responsive Grid */}

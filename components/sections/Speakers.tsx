@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useRef } from "react";
+import Image from "next/image";
 import { AnimatePresence, motion } from "framer-motion";
 import { Search, X, Sparkles, AlertCircle } from "lucide-react";
 import { FaLinkedin, FaTwitter, FaGithub } from "react-icons/fa";
@@ -347,9 +348,10 @@ export function Speakers() {
                     <Image
                       src={selectedSpeaker.image}
                       alt={selectedSpeaker.name}
-                      fill
+                      width={128}
+                      height={128}
                       unoptimized={true}
-                      className="object-cover"
+                      className="w-full h-full object-cover"
                     />
                   </div>
 
