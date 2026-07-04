@@ -1,26 +1,173 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #040308;
+  --foreground: #f4f4f7;
+  
+  --card: rgba(12, 10, 22, 0.45);
+  --card-foreground: #f4f4f7;
+  
+  --popover: #08070d;
+  --popover-foreground: #f4f4f7;
+  
+  --primary: #8b5cf6;
+  --primary-foreground: #ffffff;
+  
+  --secondary: #ec4899;
+  --secondary-foreground: #ffffff;
+  
+  --muted: #12101e;
+  --muted-foreground: #a1a1b2;
+  
+  --accent: #ff9900;
+  --accent-foreground: #040308;
+  
+  --destructive: #ef4444;
+  --destructive-foreground: #fafafa;
+  
+  --border: rgba(255, 255, 255, 0.08);
+  --input: rgba(255, 255, 255, 0.08);
+  
+  --ring: #ff9900;
+  --radius: 1rem;
+
+  /* Typography Scale */
+  --font-size-hero: clamp(2.5rem, 5vw + 1rem, 5.5rem);
+  --font-size-section-title: clamp(2rem, 3.5vw + 0.5rem, 3.5rem);
+  --font-size-subtitle: clamp(1rem, 1.2vw + 0.5rem, 1.25rem);
+
+  /* Fallback System Font Families */
+  --font-geist-sans: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --font-geist-mono: SFMono-Regular, Consolas, "Liberation Mono", Menlo, monospace;
 }
 
-@theme inline {
+@theme {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+  --color-aws-orange: #ff9900;
+  --color-aws-orange-light: #ffb300;
+  --color-purple-primary: #8b5cf6;
+  --color-pink-primary: #ec4899;
+  --color-indigo-primary: #6366f1;
+  --color-near-black: #040308;
+
+  --radius-lg: var(--radius);
+  --radius-md: calc(var(--radius) - 4px);
+  --radius-sm: calc(var(--radius) - 8px);
+
+  --animate-ripple: ripple 600ms cubic-bezier(0.1, 0.8, 0.3, 1);
+  --animate-float: float 6s ease-in-out infinite;
+
+  @keyframes ripple {
+    from {
+      transform: scale(0);
+      opacity: 0.55;
+    }
+    to {
+      transform: scale(4);
+      opacity: 0;
+    }
+  }
+
+  @keyframes float {
+    0%, 100% {
+      transform: translateY(0px);
+    }
+    50% {
+      transform: translateY(-10px);
+    }
   }
 }
 
+/* Custom Tailwind v4 Utilities */
+@utility text-gradient-aws {
+  background: linear-gradient(135deg, #ff9900 0%, #ffc061 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+@utility text-gradient-purple-pink {
+  background: linear-gradient(135deg, #8b5cf6 0%, #ec4899 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+@utility text-gradient-indigo-purple {
+  background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+@utility glass-card {
+  background: rgba(12, 10, 22, 0.45);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+@utility glass-panel {
+  background: rgba(6, 5, 12, 0.7);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+@utility glow-purple {
+  box-shadow: 0 0 40px -5px rgba(139, 92, 246, 0.15);
+}
+
+@utility glow-orange {
+  box-shadow: 0 0 40px -5px rgba(255, 153, 0, 0.15);
+}
+
+@utility animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+/* Base Body Styling */
 body {
-  background: var(--background);
+  background-color: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-geist-sans), Arial, sans-serif;
+  overflow-x: hidden;
+}
+
+/* Lenis Smooth Scroll Configuration */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+
+.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+.lenis-stopped {
+  overflow: hidden;
+}
+
+.lenis-scrolling iframe {
+  pointer-events: none;
 }
