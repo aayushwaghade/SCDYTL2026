@@ -174,7 +174,7 @@ export function MeetTheTeam() {
   return (
     <section
       id="team"
-      className="relative py-20 md:py-28 lg:py-36 overflow-hidden"
+      className="relative pt-20 md:pt-28 lg:pt-36 pb-0 overflow-hidden"
     >
       {/* Ambient glow — decorative */}
       <div
@@ -187,7 +187,6 @@ export function MeetTheTeam() {
       />
 
       <div className="mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8">
-
         {/* ── Section heading ── */}
         <div className="text-center mb-14 md:mb-18">
           <motion.h2
@@ -217,6 +216,10 @@ export function MeetTheTeam() {
             Led by Pranav Shinde, the AWS Student Builder Group Leader and Captain of AWS Cloud Club JDIET, our dedicated team at JDIET Yavatmal is proud to organize the first-ever AWS Student Community Day Yavatmal (Yachtmar) 2026.
           </motion.p>
         </div>
+      </div>
+
+
+      <div className="mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8">
 
         {/* ── Group A — Leader + Dept Leads : 8 people, 2 rows × 4 cols ── */}
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 md:gap-3">
@@ -234,8 +237,24 @@ export function MeetTheTeam() {
             <FlipCard key={member.name} member={member} index={i} />
           ))}
         </div>
-
       </div>
+
+      {/* ── Section Hero Banner ── */}
+      <motion.div
+        initial={{ opacity: 0, y: 24 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+        className="w-full mt-20 md:mt-28 flex justify-center"
+      >
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src="/images/img-banner.png"
+          alt="AWS Student Community Day Yavatmal 2026 Team Banner"
+          className="w-full h-auto block select-none"
+          draggable="false"
+        />
+      </motion.div>
     </section>
   );
 }
