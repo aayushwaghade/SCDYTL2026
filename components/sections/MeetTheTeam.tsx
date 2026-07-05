@@ -212,9 +212,9 @@ export function MeetTheTeam() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.45, delay: 0.2 }}
-            className="mt-5 text-[#7a7a8c] text-sm sm:text-base max-w-xl mx-auto leading-relaxed"
+            className="mt-5 text-[#7a7a8c] text-sm sm:text-base max-w-2xl mx-auto leading-relaxed"
           >
-            The people behind AWS Student Community Day Yavatmal 2026.
+            Led by Pranav Shinde, the AWS Student Builder Group Leader and Captain of AWS Cloud Club JDIET, our dedicated team at JDIET Yavatmal is proud to organize the first-ever AWS Student Community Day Yavatmal (Yachtmar) 2026.
           </motion.p>
         </div>
 

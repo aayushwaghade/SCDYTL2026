@@ -11,20 +11,24 @@ import { cn } from "@/lib/utils";
 
 const FAQS = [
   {
-    question: "What is AWS Student Community Day?",
-    answer: "It is a student-led, community-focused cloud conference where technology enthusiasts gather to learn, collaborate, and share knowledge about Amazon Web Services (AWS) cloud technologies.",
+    question: "What is the AWS Student Community Day Yavatmal 2026?",
+    answer: "It is the first AWS Student Community Day in Yavatmal — a premier student-led, community-focused cloud conference where tech enthusiasts, student builders, and members of the developer community in Yavatmal gather to learn, collaborate, and share knowledge about Amazon Web Services (AWS) cloud technologies.",
   },
   {
-    question: "Who can attend this event?",
-    answer: "Any college student, academic faculty member, professional developer, or tech enthusiast interested in learning about cloud computing, artificial intelligence, and modern engineering is welcome to join.",
+    question: "Who is organizing this AWS Cloud Club JDIET Yavatmal event?",
+    answer: "This landmark technical event in Yavatmal is proudly organized by the AWS Student Builder Group JDIET (AWS SBG JDIET) and the AWS Cloud Club Yavatmal. The organizing team is led by Pranav Shinde, the AWS Student Builder Group Leader and Captain of AWS Cloud Club JDIET, bringing together the JDIET Yavatmal developer community.",
   },
   {
-    question: "Is there a registration fee?",
-    answer: "The Student Pass is entirely free of charge but requires a valid student email/ID verification and registration approval. Professional Passes are paid tickets.",
+    question: "Who can attend this student tech conference in Maharashtra?",
+    answer: "Any student, developer, academic faculty member, or cloud enthusiast in the Vidarbha region and Maharashtra is welcome to join. It is designed to be the best tech event for students in Vidarbha, catering to all skill levels from beginner to advanced.",
   },
   {
-    question: "Will I get a certificate of attendance?",
-    answer: "Yes, all registered attendees who participate in the conference tracks will receive an official digital Certificate of Attendance signed by the organizers.",
+    question: "How do I complete the AWS student event Yavatmal 2026 registration?",
+    answer: "You can complete your registration directly on our website by visiting the Tickets section. We offer a Student Pass (which requires verification of your JDIET Yavatmal or other college ID) as well as Professional Passes for industry members.",
+  },
+  {
+    question: "Will there be Generative AI workshops and AWS certification guidance?",
+    answer: "Absolutely! The agenda features specialized sessions on AWS cloud computing for students, a Generative AI workshop for students, details on the AWS re/Start student event, and hands-on cloud computing workshops. Attendees will also receive direct AWS certification guidance for students to help boost their professional career paths.",
   },
 ];
 

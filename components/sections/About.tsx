@@ -29,17 +29,17 @@ const SPARKLES = [
 const STATEMENTS = [
   {
     id: "s1",
-    text: "Cloud, AI & modern software development — brought to Yavatmal.",
+    text: "AWS Cloud, AI & modern software engineering brought to Yavatmal — empowering the local technical event ecosystem.",
     size: "large",
   },
   {
     id: "s2",
-    text: "First ever. Students, developers, and industry leaders under one roof.",
+    text: "The first-ever AWS Student Community Day in Yavatmal, bringing students, developers, and industry leaders together.",
     size: "large",
   },
   {
     id: "s3",
-    text: "A milestone for the region — and the beginning of something much bigger.",
+    text: "A major milestone for the AWS event Vidarbha community and the student tech conference Maharashtra networks.",
     size: "medium",
   },
 ] as const;

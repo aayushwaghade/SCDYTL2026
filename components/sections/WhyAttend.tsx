@@ -21,37 +21,37 @@ const WHY_ATTEND_DATA: WhyAttendItem[] = [
   {
     id: "experts",
     title: "Learn from Industry Experts",
-    description: "Learn directly from AWS Heroes, Solutions Architects, and tech leaders.",
+    description: "Learn directly from AWS Heroes, Solutions Architects, and regional developer community leaders.",
     icon: Users,
   },
   {
     id: "cloud-ai",
     title: "Cloud & AI Learning",
-    description: "Deep dive into Cloud Computing, Generative AI, and serverless engineering.",
+    description: "Deep dive into AWS cloud computing for students, including a Generative AI workshop and AWS re/Start details.",
     icon: Cpu,
   },
   {
     id: "hands-on",
     title: "Hands-on Experience",
-    description: "Build cloud projects in real-time with direct platform experience.",
+    description: "Participate in our cloud computing workshop in India, building real projects with direct platform access.",
     icon: Laptop,
   },
   {
     id: "networking",
     title: "Networking Opportunities",
-    description: "Connect with hundreds of students, professional developers, and regional leaders.",
+    description: "Connect with hundreds of peers in the tech community in Yavatmal and tech meetup Yavatmal organizers.",
     icon: Network,
   },
   {
     id: "career",
     title: "Career Guidance",
-    description: "Gain career advice, resume insights, and explore internship opportunities.",
+    description: "Get AWS certification guidance for students, internship pathways, and connect with technical event leaders.",
     icon: Compass,
   },
   {
     id: "swag",
     title: "Certificates, Goodies & Prizes",
-    description: "Earn official participation certificates, quizzes, and exclusive AWS schwag.",
+    description: "Earn official participation certificates, win prizes, and enjoy exclusive AWS student developer conference schwag.",
     icon: Gift,
   },
 ];
