@@ -1,71 +1,176 @@
-import React from "react";
-import { Container } from "@/components/shared/Container";
-import { Section } from "@/components/shared/Section";
-import { Reveal } from "@/components/animations/Reveal";
-import { GlassCard } from "@/components/cards/GlassCard";
-import { SectionHeading } from "@/components/ui/SectionHeading";
-import { Clock, MapPin } from "lucide-react";
+"use client";
 
-const SESSIONS = [
+import React from "react";
+import { motion } from "framer-motion";
+
+// ─── Data ───────────────────────────────────────────────────────────────────────
+
+interface AgendaItem {
+  time: string;
+  title: string;
+  tag?: string; // optional session-type label, e.g. "Keynote Address"
+}
+
+const AGENDA_ITEMS: AgendaItem[] = [
   {
-    time: "09:00 AM - 10:00 AM",
+    time: "09:00 AM",
     title: "Registrations & Welcome Kit Distribution",
-    description: "Collect your passes, entry badges, and event schwag at the JDIET entrance desk.",
-    location: "Main Lobby",
   },
   {
-    time: "10:00 AM - 10:45 AM",
-    title: "Keynote: Next-Gen Dev with AWS GenAI",
-    description: "Opening keynote highlighting modern AI capabilities, Amazon Bedrock, and cloud-native developments.",
-    location: "Auditorium",
+    time: "10:00 AM",
+    title: "Next-Gen Dev with AWS GenAI",
+    tag: "Keynote Address",
   },
   {
-    time: "10:45 AM - 11:30 AM",
+    time: "10:45 AM",
     title: "Serverless Solutions at Scale",
-    description: "Building production-ready architectures using AWS Lambda, API Gateway, and DynamoDB.",
-    location: "Seminar Hall 1",
+  },
+  {
+    time: "11:30 AM",
+    title: "Agentic AI & Super Agents: Next-Gen AI Infrastructure",
+  },
+  {
+    time: "12:15 PM",
+    title: "Navigating an AI-Driven World: Thinking Beyond Coding",
+    tag: "Talk",
+  },
+  {
+    time: "01:00 PM",
+    title: "Lunch & Networking Break",
+  },
+  {
+    time: "02:00 PM",
+    title: "Embedding AI into Enterprise Service Delivery Operating Models",
+    tag: "Talk",
+  },
+  {
+    time: "02:45 PM",
+    title: "Building Intelligent Applications with Snowflake and AWS",
+  },
+  {
+    time: "03:30 PM",
+    title: "The Power of Open-Weight Models in Enterprise AI",
+    tag: "Talk",
+  },
+  {
+    time: "04:15 PM",
+    title: "Lessons from Scaling Swiggy and Building the Future of Search",
+    tag: "Panel Discussion",
+  },
+  {
+    time: "05:00 PM",
+    title: "Scaling AWS Developer Communities and Ecosystems",
+  },
+  {
+    time: "05:45 PM",
+    title: "Closing Ceremony & Networking",
+    tag: "Closing",
   },
 ];
 
+// ─── AgendaItem Row ─────────────────────────────────────────────────────────────
+
+function AgendaRow({ item, index }: { item: AgendaItem; index: number }) {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, amount: 0.15 }}
+      transition={{ duration: 0.45, delay: index * 0.04, ease: [0.16, 1, 0.3, 1] }}
+      className="flex items-stretch min-h-[80px] sm:min-h-[90px] rounded-sm mb-3"
+      style={{
+        background: "#161412",
+        borderLeft: "3px solid rgba(255, 153, 0, 0.85)",
+      }}
+    >
+      {/* Time column */}
+      <div className="flex items-center justify-center px-5 sm:px-8 shrink-0 w-[120px] sm:w-[160px]">
+        <span className="text-base sm:text-xl font-black text-white tracking-tight tabular-nums whitespace-nowrap">
+          {item.time}
+        </span>
+      </div>
+
+      {/* Thin vertical divider */}
+      <div className="w-px self-stretch bg-white/10 shrink-0" />
+
+      {/* Content column */}
+      <div className="flex flex-col justify-center px-5 sm:px-8 py-4 flex-1 min-w-0">
+        {/* Optional tag pill */}
+        {item.tag && (
+          <span className="inline-block self-start text-[10px] font-bold tracking-widest uppercase text-[#8a8a9a] border border-white/10 rounded-full px-2.5 py-0.5 mb-2">
+            {item.tag}
+          </span>
+        )}
+
+        {/* Session title + underline accent */}
+        <div>
+          <h3 className="text-base sm:text-lg font-extrabold text-white tracking-tight leading-snug">
+            {item.title}
+          </h3>
+          {/* Thin underline */}
+          <div className="mt-2 h-px w-12 bg-white/20" />
+        </div>
+      </div>
+    </motion.div>
+  );
+}
+
+// ─── Main Section ───────────────────────────────────────────────────────────────
+
 export function Agenda() {
   return (
-    <Section id="agenda" className="relative">
-      <Container>
-        <SectionHeading
-          title="Event"
-          gradientTitle="Agenda"
-          gradientVariant="purple-pink"
-          subtitle="Explore the timeline of keynotes, breakout sessions, hands-on labs, and networking tracks."
-        />
+    <section
+      id="agenda"
+      className="relative py-24 md:py-32 lg:py-40 overflow-hidden"
+    >
+      {/* Subtle ambient glow */}
+      <div
+        className="absolute top-0 right-1/4 w-[500px] h-[300px] pointer-events-none -z-10"
+        style={{
+          background:
+            "radial-gradient(ellipse at center, rgba(255,153,0,0.06) 0%, transparent 70%)",
+          filter: "blur(60px)",
+        }}
+      />
 
-        <div className="max-w-4xl mx-auto">
-          <div className="relative border-l border-border/40 pl-6 sm:pl-8 space-y-8">
-            {SESSIONS.map((session, index) => (
-              <Reveal key={session.title} delay={0.1 * index}>
-                {/* Timeline Dot */}
-                <div className="absolute -left-[9px] top-7 w-4.5 h-4.5 rounded-full bg-aws-orange border-4 border-background" />
-
-                <GlassCard glowColor="orange" className="p-6">
-                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-3">
-                    <span className="flex items-center gap-2 text-xs font-semibold text-aws-orange">
-                      <Clock className="w-4 h-4" />
-                      <span>{session.time}</span>
-                    </span>
-                    <span className="flex items-center gap-2 text-xs text-muted-foreground">
-                      <MapPin className="w-4 h-4" />
-                      <span>{session.location}</span>
-                    </span>
-                  </div>
-                  <h3 className="text-lg font-bold mb-2">{session.title}</h3>
-                  <p className="text-sm text-muted-foreground leading-relaxed">
-                    {session.description}
-                  </p>
-                </GlassCard>
-              </Reveal>
-            ))}
-          </div>
+      <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
+        {/* ── Section Heading ── */}
+        <div className="text-center mb-20 md:mb-28">
+          <motion.h2
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+            className="text-[clamp(3.5rem,8vw,6rem)] font-black text-white tracking-[-0.03em] uppercase leading-none"
+          >
+            AGENDA
+          </motion.h2>
+          <motion.div
+            initial={{ scaleX: 0 }}
+            whileInView={{ scaleX: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.15, ease: "easeOut" }}
+            className="mt-6 mx-auto h-px w-16 bg-white/20 origin-left"
+          />
+          <motion.p
+            initial={{ opacity: 0, y: 12 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5, delay: 0.2 }}
+            className="mt-6 text-[#a1a1b2] text-base sm:text-lg max-w-2xl mx-auto leading-relaxed"
+          >
+            A full-day lineup of keynotes, deep-dives, and networking — all on the
+            AWS Student Community Day Yavatmal 2026 stage.
+          </motion.p>
         </div>
-      </Container>
-    </Section>
+
+        {/* ── Timeline ── */}
+        <div className="max-w-4xl mx-auto">
+          {AGENDA_ITEMS.map((item, index) => (
+            <AgendaRow key={`${item.time}-${index}`} item={item} index={index} />
+          ))}
+        </div>
+      </div>
+    </section>
   );
 }

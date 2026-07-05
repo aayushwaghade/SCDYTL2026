@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 :root {
-  --background: #040308;
+  --background: #050507;
   --foreground: #f4f4f7;
   
   --card: rgba(12, 10, 22, 0.45);
@@ -36,8 +36,8 @@
   --font-size-section-title: clamp(2rem, 3.5vw + 0.5rem, 3.5rem);
   --font-size-subtitle: clamp(1rem, 1.2vw + 0.5rem, 1.25rem);
 
-  /* Fallback System Font Families */
-  --font-geist-sans: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  /* Font Families — primary: Bai Jamjuree (matches DevSparks visual language) */
+  --font-geist-sans: var(--font-bai-jamjuree, "Bai Jamjuree"), system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   --font-geist-mono: SFMono-Regular, Consolas, "Liberation Mono", Menlo, monospace;
 }
 
@@ -67,7 +67,7 @@
   --color-purple-primary: #8b5cf6;
   --color-pink-primary: #ec4899;
   --color-indigo-primary: #6366f1;
-  --color-near-black: #040308;
+  --color-near-black: #050507;
 
   --radius-lg: var(--radius);
   --radius-md: calc(var(--radius) - 4px);
@@ -142,9 +142,14 @@
   animation: float 6s ease-in-out infinite;
 }
 
-/* Base Body Styling */
+/* ─── Layer 1: Shared page background — defined once, inherited by all sections ─── */
 body {
-  background-color: var(--background);
+  background-color: #050507;
+  /* Fine grid texture — low opacity lines, identical to the Stats section grid */
+  background-image:
+    linear-gradient(to right,  rgba(255, 255, 255, 0.025) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.025) 1px, transparent 1px);
+  background-size: 50px 50px;
   color: var(--foreground);
   font-family: var(--font-geist-sans), Arial, sans-serif;
   overflow-x: hidden;
@@ -170,4 +175,19 @@ html.lenis body {
 
 .lenis-scrolling iframe {
   pointer-events: none;
+}
+
+@theme {
+  --color-sparkles-color: var(--sparkles-color);
+  --color-gradient-color: var(--gradient-color);
+}
+
+:root {
+  --gradient-color: #8350e8;
+  --sparkles-color: #8350e8;
+}
+
+.dark {
+  --gradient-color: #8350e8;
+  --sparkles-color: #ffffff;
 }

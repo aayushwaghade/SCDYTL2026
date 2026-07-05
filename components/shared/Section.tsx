@@ -12,8 +12,10 @@ export function Section({ children, className, id, hasBackground = false, ...pro
     <section
       id={id}
       className={cn(
+        // Sections are transparent — they inherit the global Layer 1 background from body.
+        // Only add a faint surface tint when hasBackground is explicitly requested.
         "relative py-16 md:py-24 lg:py-32 overflow-hidden",
-        hasBackground && "bg-muted/30 border-y border-border/20",
+        hasBackground && "bg-white/[0.02] border-y border-white/[0.04]",
         className
       )}
       {...props}
@@ -22,3 +24,4 @@ export function Section({ children, className, id, hasBackground = false, ...pro
     </section>
   );
 }
+

@@ -1,7 +1,15 @@
 import type { Metadata, Viewport } from "next";
+import { Bai_Jamjuree } from "next/font/google";
 import { Providers } from "@/components/layout/Providers";
 import { Toaster } from "sonner";
 import "./globals.css";
+
+const baiJamjuree = Bai_Jamjuree({
+  subsets: ["latin"],
+  weight: ["300", "400", "500", "600", "700"],
+  variable: "--font-bai-jamjuree",
+  display: "swap",
+});
 
 export const viewport: Viewport = {
   themeColor: "#040308",
@@ -52,11 +60,14 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className="h-full antialiased dark"
+      className={`h-full antialiased dark ${baiJamjuree.variable}`}
       style={{ colorScheme: "dark" }}
       suppressHydrationWarning
     >
-      <body className="min-h-full flex flex-col bg-background text-foreground">
+      <body
+        className="min-h-full flex flex-col bg-background text-foreground"
+        style={{ fontFamily: "var(--font-bai-jamjuree), sans-serif" }}
+      >
         <Providers>
           {children}
           <Toaster position="bottom-right" theme="dark" richColors />

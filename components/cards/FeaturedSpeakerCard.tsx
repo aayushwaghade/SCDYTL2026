@@ -3,8 +3,7 @@
 import React from "react";
 import Image from "next/image";
 import { motion } from "framer-motion";
-import { FaLinkedin, FaTwitter, FaGithub } from "react-icons/fa";
-import { Sparkles, ArrowRight } from "lucide-react";
+import { FaLinkedin } from "react-icons/fa";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 import { Speaker } from "@/data/speakers";
 
@@ -17,13 +16,18 @@ interface FeaturedSpeakerCardProps {
 export function FeaturedSpeakerCard({ speaker, onViewProfile, index }: FeaturedSpeakerCardProps) {
   const shouldReduceMotion = useReducedMotion();
 
-  // Color schemes based on index or category
+  // Shimmering border colors for featured card
   const themeGradients = [
     "from-aws-orange via-purple-primary to-pink-primary",
     "from-purple-primary via-pink-primary to-indigo-primary",
     "from-indigo-primary via-aws-orange to-purple-primary"
   ];
   const borderGradient = themeGradients[index % themeGradients.length];
+
+  // Handle clicking the LinkedIn button separately from opening the modal
+  const handleLinkedInClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    e.stopPropagation();
+  };
 
   return (
     <motion.div
@@ -32,9 +36,10 @@ export function FeaturedSpeakerCard({ speaker, onViewProfile, index }: FeaturedS
       viewport={{ once: true, amount: 0.15 }}
       transition={{ duration: 0.6, delay: index * 0.1, ease: [0.16, 1, 0.3, 1] }}
       whileHover={shouldReduceMotion ? {} : { y: -6, scale: 1.01 }}
-      className="group relative w-full rounded-2xl p-[1.5px] overflow-hidden transition-all duration-300"
+      onClick={() => onViewProfile(speaker)}
+      className="group relative w-full rounded-xl p-[1.5px] overflow-hidden transition-all duration-300 cursor-pointer select-none"
     >
-      {/* Animated Glowing Gradient Border (Apple/AWS Event style) */}
+      {/* Animated Glowing Shimmer Border */}
       <div 
         className={`absolute inset-0 bg-gradient-to-r ${borderGradient} bg-[length:200%_200%] opacity-40 group-hover:opacity-100 transition-opacity duration-500`}
         style={shouldReduceMotion ? {} : {
@@ -42,103 +47,62 @@ export function FeaturedSpeakerCard({ speaker, onViewProfile, index }: FeaturedS
         }}
       />
       
-      {/* Core Card Content with Glassmorphism */}
-      <div className="relative z-10 w-full h-full rounded-[15px] bg-card/85 backdrop-blur-xl border border-white/5 p-6 sm:p-8 flex flex-col items-center text-center">
-        {/* Large Circular Image Wrapper */}
-        <div className="relative w-36 h-36 sm:w-40 sm:h-40 rounded-full mb-6 group-hover:scale-105 transition-transform duration-500 ease-out">
-          {/* Inner ring gradient border */}
-          <div className={`absolute -inset-1.5 rounded-full bg-gradient-to-tr ${borderGradient} opacity-70 group-hover:opacity-100 transition-opacity duration-300 blur-[2px]`} />
-          <div className="absolute -inset-1 rounded-full bg-near-black" />
+      {/* Core Card Content */}
+      <div className="relative z-10 w-full h-full rounded-[11px] bg-[#0e0709] p-6 sm:p-8 flex flex-col items-center text-center">
+        {/* Background Subtle Red Radial Glow */}
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(220,38,38,0.08)_0%,transparent_70%)] pointer-events-none" />
+
+        {/* Floating Glassmorphic LinkedIn Button */}
+        {speaker.linkedin && (
+          <a
+            href={speaker.linkedin}
+            target="_blank"
+            rel="noreferrer"
+            onClick={handleLinkedInClick}
+            className="absolute top-4 right-4 z-20 w-8 h-8 rounded-full bg-white/5 border border-white/10 hover:bg-[#0a66c2] hover:border-transparent flex items-center justify-center text-muted-foreground hover:text-white transition-all duration-300 backdrop-blur-md shadow-lg"
+            aria-label={`Connect with ${speaker.name} on LinkedIn`}
+          >
+            <FaLinkedin className="w-4 h-4" />
+          </a>
+        )}
+
+        {/* Centered Circular Speaker Image Container */}
+        <div className="relative w-36 h-36 sm:w-40 sm:h-40 rounded-full mb-6 shrink-0 flex items-center justify-center">
+          {/* Deep Blue Circular Background */}
+          <div className="absolute inset-0 rounded-full bg-[#16274e] border border-white/5 shadow-inner" />
           
-          <div className="w-full h-full rounded-full overflow-hidden relative border-2 border-white/10">
+          {/* Circular image overlay */}
+          <div className="w-[92%] h-[92%] rounded-full overflow-hidden relative z-10">
             <Image
               src={speaker.image}
               alt={speaker.name}
               fill
-              unoptimized={true} // Bypasses Next.js remote pattern requirements
-              className="object-cover transition-transform duration-500 group-hover:scale-110"
+              unoptimized={true}
+              className="object-cover transition-transform duration-500 ease-out group-hover:scale-105"
             />
           </div>
-
-          {/* Online Indicator Glow */}
-          <div className="absolute bottom-2 right-2 w-4 h-4 rounded-full bg-[#10b981] border-2 border-near-black shadow-[0_0_12px_#10b981] z-20 flex items-center justify-center">
-            <span className="absolute w-full h-full bg-[#10b981] rounded-full animate-ping opacity-75" />
-          </div>
         </div>
 
-        {/* Tag / Category */}
-        <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full border border-white/10 bg-white/5 text-[11px] font-semibold tracking-wider text-aws-orange uppercase mb-3">
-          <Sparkles className="w-3 h-3 text-aws-orange" />
-          {speaker.sessionCategory}
-        </span>
-
-        {/* Profile Info */}
-        <h3 className="text-2xl font-extrabold text-foreground group-hover:text-aws-orange transition-colors duration-300 mb-1">
-          {speaker.name}
-        </h3>
-        <p className="text-sm font-medium text-purple-300 mb-3">
-          {speaker.designation} <span className="text-muted-foreground/60">at</span> <span className="text-white font-semibold">{speaker.company}</span>
-        </p>
-
-        {/* Session Abstract Box */}
-        <div className="w-full bg-white/5 rounded-xl border border-white/5 p-4 mb-6 group-hover:bg-white/10 transition-colors duration-300 flex-grow flex flex-col justify-center">
-          <span className="text-[10px] text-muted-foreground font-bold tracking-widest uppercase block mb-1">Session Topic</span>
-          <p className="text-sm text-foreground/90 font-semibold line-clamp-2 leading-relaxed">
-            {speaker.sessionTitle}
+        {/* Speaker Info Text Details */}
+        <div className="flex flex-col flex-grow justify-start">
+          {/* Name in all-caps, white, bold, tracking-wider */}
+          <h3 className="text-xl font-extrabold text-white tracking-wider uppercase mb-3 group-hover:text-aws-orange transition-colors duration-300">
+            {speaker.name}
+          </h3>
+          
+          {/* Designation and Company */}
+          <p className="text-sm text-gray-300/90 leading-relaxed font-light line-clamp-3">
+            {speaker.designation}
+            {speaker.company && (
+              <span className="block mt-1 font-semibold text-gray-400 text-xs group-hover:text-aws-orange/80 transition-colors duration-300">
+                {speaker.company}
+              </span>
+            )}
           </p>
-        </div>
-
-        {/* Action Buttons & Socials */}
-        <div className="w-full flex items-center justify-between mt-auto pt-4 border-t border-white/5 gap-4">
-          {/* Social Icons */}
-          <div className="flex items-center gap-3">
-            {speaker.linkedin && (
-              <a
-                href={speaker.linkedin}
-                target="_blank"
-                rel="noreferrer"
-                className="w-9 h-9 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-muted-foreground hover:text-aws-orange hover:bg-white/10 hover:border-aws-orange/30 transition-all duration-300"
-                aria-label={`${speaker.name} LinkedIn Profile`}
-              >
-                <FaLinkedin className="w-4 h-4" />
-              </a>
-            )}
-            {speaker.twitter && (
-              <a
-                href={speaker.twitter}
-                target="_blank"
-                rel="noreferrer"
-                className="w-9 h-9 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-muted-foreground hover:text-aws-orange hover:bg-white/10 hover:border-aws-orange/30 transition-all duration-300"
-                aria-label={`${speaker.name} Twitter Profile`}
-              >
-                <FaTwitter className="w-4 h-4" />
-              </a>
-            )}
-            {speaker.github && (
-              <a
-                href={speaker.github}
-                target="_blank"
-                rel="noreferrer"
-                className="w-9 h-9 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-muted-foreground hover:text-aws-orange hover:bg-white/10 hover:border-aws-orange/30 transition-all duration-300"
-                aria-label={`${speaker.name} GitHub Profile`}
-              >
-                <FaGithub className="w-4 h-4" />
-              </a>
-            )}
-          </div>
-
-          {/* View Profile Button */}
-          <button
-            onClick={() => onViewProfile(speaker)}
-            className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold bg-white/5 hover:bg-aws-orange hover:text-near-black text-white border border-white/10 hover:border-transparent transition-all duration-300 cursor-pointer shadow-sm group/btn"
-          >
-            View Profile
-            <ArrowRight className="w-3.5 h-3.5 transition-transform duration-300 group-hover/btn:translate-x-1" />
-          </button>
         </div>
       </div>
 
-      {/* Tailwind v4 animation rule inject fallback style */}
+      {/* Animation rule styles */}
       <style jsx global>{`
         @keyframes shimmerBorder {
           0% { background-position: 0% 50%; }

@@ -1,40 +1,37 @@
 import React from "react";
 import { Container } from "@/components/shared/Container";
 import { Section } from "@/components/shared/Section";
-import { VenueCard } from "@/components/cards/VenueCard";
-import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Reveal } from "@/components/animations/Reveal";
 import { MapPin } from "lucide-react";
 
 export function Venue() {
   return (
-    <Section id="venue" className="relative">
+    <Section id="venue" className="relative py-12 md:py-16 lg:py-20">
+      {/* Background ambient glow */}
+      <div 
+        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[350px] h-[350px] bg-aws-orange/5 blur-[100px] rounded-full pointer-events-none -z-10" 
+      />
+
       <Container>
-        <SectionHeading
-          title="Event"
-          gradientTitle="Venue"
-          gradientVariant="purple-pink"
-          subtitle="Find your way to the biggest student cloud conference in the region."
-        />
+        <div className="max-w-2xl mx-auto text-center">
+          <Reveal delay={0.1}>
+            <div className="flex flex-col items-center">
+              {/* Clean MapPin icon sitting directly on the background */}
+              <MapPin className="w-8 h-8 text-aws-orange mb-4 shrink-0" />
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center max-w-5xl mx-auto">
-          <VenueCard
-            name="JDIET Yavatmal"
-            description="Jawaharlal Darda Institute of Engineering and Technology (JDIET) campus auditorium and seminar halls. Located in Yavatmal, Maharashtra, India."
-            address="Arni Road, Yavatmal, Maharashtra 445001"
-            googleMapsUrl="https://maps.google.com"
-            delay={0.1}
-          />
-
-          <Reveal delay={0.2}>
-            {/* Map Placeholder */}
-            <div className="w-full h-[350px] rounded-2xl border border-white/5 bg-white/5 overflow-hidden flex flex-col items-center justify-center relative">
-              <div className="absolute inset-0 bg-[radial-gradient(ellipse_60%_50%_at_50%_50%,rgba(139,92,246,0.05),transparent)]" />
-              <MapPin className="w-12 h-12 text-aws-orange mb-4 animate-bounce" />
-              <p className="text-sm font-bold text-foreground">Interactive Map Placeholder</p>
-              <p className="text-xs text-muted-foreground mt-1 px-6 text-center leading-relaxed">
-                A customized Google Map iframe or dynamic map component will load here in the future.
+              {/* Main Announcement Content */}
+              <h3 className="text-2xl md:text-3xl font-extrabold mb-3 tracking-tight text-white">
+                Location Revealed Soon
+              </h3>
+              
+              <p className="text-sm md:text-base text-muted-foreground max-w-lg mx-auto leading-relaxed">
+                We are finalizing a premier venue to host high-energy sessions, hands-on labs, and community networking. Check back soon for the official location details and travel instructions!
               </p>
+
+              {/* Region Badge */}
+              <div className="mt-6 text-xs text-aws-orange/70 font-semibold tracking-widest uppercase border-t border-white/5 pt-4 w-full max-w-[200px]">
+                Yavatmal, Maharashtra, India
+              </div>
             </div>
           </Reveal>
         </div>
@@ -42,3 +39,5 @@ export function Venue() {
     </Section>
   );
 }
+
+

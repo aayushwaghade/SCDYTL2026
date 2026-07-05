@@ -1,25 +1,27 @@
 import React from "react";
 import { NoiseOverlay } from "./NoiseOverlay";
-import { GridBackground } from "./GridBackground";
 import { AuroraBackground } from "./AuroraBackground";
 
 interface BackgroundSystemProps {
   children?: React.ReactNode;
 }
 
+/**
+ * BackgroundSystem — renders ambient aurora orbs + noise overlay on top of
+ * the global Layer 1 background (grid + near-black, defined once in body CSS).
+ * This wrapper is intentionally transparent so it never resets or overrides
+ * the shared page background.
+ */
 export function BackgroundSystem({ children }: BackgroundSystemProps) {
   return (
-    <div className="relative min-h-screen w-full bg-near-black text-foreground overflow-hidden">
-      {/* Background Aurora Orbs */}
+    <div className="relative min-h-screen w-full text-foreground overflow-hidden">
+      {/* Ambient aurora orbs — sit above Layer 1, below content */}
       <AuroraBackground />
 
-      {/* Grid Pattern */}
-      <GridBackground type="grid" />
-
-      {/* Noise Texture */}
+      {/* Subtle noise texture overlay */}
       <NoiseOverlay />
 
-      {/* Page Content */}
+      {/* Page Content (Layer 2 surfaces + section content) */}
       <div className="relative z-10 w-full min-h-screen flex flex-col">
         {children}
       </div>

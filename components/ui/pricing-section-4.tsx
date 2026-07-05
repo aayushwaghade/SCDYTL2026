@@ -1,14 +1,13 @@
 "use client";
 
-import React, { useState, useRef } from "react";
-import { motion } from "framer-motion";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Sparkles as SparklesComp } from "@/components/ui/sparkles";
 import { TimelineContent } from "@/components/ui/timeline-animation";
 import { VerticalCutReveal } from "@/components/ui/vertical-cut-reveal";
 import { cn } from "@/lib/utils";
 import NumberFlow from "@number-flow/react";
-
+import { motion } from "framer-motion";
+import { useRef, useState } from "react";
 
 const SHARED_BENEFITS = [
   "Pass includes:",
@@ -110,10 +109,9 @@ const PricingSwitch = ({ onSwitch }: { onSwitch: (value: string) => void }) => {
   );
 };
 
-export function Tickets() {
+export default function PricingSection6() {
   const [isYearly, setIsYearly] = useState(false);
   const pricingRef = useRef<HTMLDivElement>(null);
-
 
   const revealVariants = {
     visible: (i: number) => ({
@@ -139,12 +137,11 @@ export function Tickets() {
 
   return (
     <div
-      id="tickets"
-      className="min-h-screen mx-auto relative bg-[#040308] overflow-x-hidden py-16 scroll-mt-20"
+      className="min-h-screen mx-auto relative bg-[#040308] overflow-x-hidden py-16"
       ref={pricingRef}
     >
       <TimelineContent
-        animationNum={5}
+        animationNum={4}
         timelineRef={pricingRef}
         customVariants={revealVariants}
         className="absolute top-0 h-96 w-screen overflow-hidden [mask-image:radial-gradient(50%_50%,white,transparent)]"
@@ -159,7 +156,7 @@ export function Tickets() {
         />
       </TimelineContent>
       <TimelineContent
-        animationNum={6}
+        animationNum={5}
         timelineRef={pricingRef}
         customVariants={revealVariants}
         className="absolute left-0 top-[-114px] w-full h-[113.625vh] flex flex-col items-start justify-start content-start flex-none flex-nowrap gap-2.5 overflow-hidden p-0 z-0 pointer-events-none"

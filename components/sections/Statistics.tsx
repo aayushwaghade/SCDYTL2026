@@ -16,7 +16,7 @@ const STATS = [
 
 export function Statistics() {
   return (
-    <Section className="relative bg-muted/5 border-y border-white/5 py-12 md:py-16 lg:py-20 overflow-hidden">
+    <Section className="relative border-y border-white/[0.04] py-12 md:py-16 lg:py-20 overflow-hidden">
       {/* Subtle background glow */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[60rem] h-[15rem] rounded-full bg-purple-primary/5 blur-[120px] pointer-events-none z-0" />
       
