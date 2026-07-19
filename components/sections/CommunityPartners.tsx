@@ -2,52 +2,76 @@
 
 import React from "react";
 import { motion } from "framer-motion";
+import { useScrollReveal } from "@/hooks/useScrollReveal";
 
-// ─── Partner slots — add logo images here when ready ──────────────────────────
-// 6 empty placeholder tiles in a 3-column grid (2 visible rows, matching the
-// reference layout). Add more slots to extend the grid as partners join.
+interface Partner {
+  name: string;
+  logo: string;
+}
 
-const PARTNER_SLOTS = [
-  { id: "cp-1" },
-  { id: "cp-2" },
-  { id: "cp-3" },
-  { id: "cp-4" },
-  { id: "cp-5" },
-  { id: "cp-6" },
+const PARTNERS: Partner[] = [
+  {
+    name: "AWS User Group Nagpur",
+    logo: "/images/Community Partners logos/aws_user_group_nagpur_logo.jpg",
+  },
+  {
+    name: "AWS User Group Pune",
+    logo: "/images/Community Partners logos/aws_user_group_pune_logo.jpg",
+  },
+  {
+    name: "AWS Student Builder Group SIPNA",
+    logo: "/images/Community Partners logos/ChatGPT Image Jul 7, 2026, 11_05_54 PM.png",
+  },
+  {
+    name: "AWS Student Builder Group PRMITR",
+    logo: "/images/Community Partners logos/WhatsApp Image 2026-07-07 at 11.02.18 PM.jpeg",
+  },
 ];
 
-// ─── Partner Logo Tile ──────────────────────────────────────────────────────────
-// Matches the Sponsors tile treatment: white card, slightly darker inner area
-// for the logo placeholder, rounded corners, no border.
+interface PartnerTileProps {
+  partner: Partner;
+  index: number;
+}
 
-function PartnerTile({ id: _id, index }: { id: string; index: number }) {
+function PartnerTile({ partner, index }: PartnerTileProps) {
+  const reveal20 = useScrollReveal({ opacity: 0, y: 20 });
+
   return (
     <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
+      {...reveal20}
       viewport={{ once: true, amount: 0.15 }}
       transition={{ duration: 0.45, delay: index * 0.06, ease: [0.16, 1, 0.3, 1] }}
-      className="h-28 sm:h-32 w-full rounded-2xl overflow-hidden flex items-center justify-center"
-      style={{ background: "#ffffff" }}
+      className="flex flex-col items-center gap-3.5 w-full group"
     >
-      {/* Slightly darker inner area — logo image goes here */}
+      {/* White background logo tile */}
       <div
-        className="w-[72%] h-[60%] rounded-lg flex items-center justify-center"
-        style={{ background: "#ebebeb" }}
+        className="h-28 sm:h-32 w-full rounded-2xl overflow-hidden flex items-center justify-center bg-white transition-all duration-300 relative cursor-pointer group-hover:scale-[1.03] group-hover:shadow-[0_0_20px_rgba(255,153,0,0.18)]"
       >
-        {/* Logo image will be placed here */}
+        <div className="w-[72%] h-[60%] flex items-center justify-center relative">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={partner.logo}
+            alt={partner.name}
+            className="max-w-full max-h-full object-contain filter group-hover:brightness-105 transition-all duration-300"
+            draggable={false}
+          />
+        </div>
       </div>
+      {/* Label beneath the logo */}
+      <span className="text-xs sm:text-[13px] font-bold text-[#c8c8d4] text-center px-1 leading-snug group-hover:text-white transition-colors duration-300">
+        {partner.name}
+      </span>
     </motion.div>
   );
 }
 
-// ─── Main Section ───────────────────────────────────────────────────────────────
-
 export function CommunityPartners() {
+  const reveal18 = useScrollReveal({ opacity: 0, y: 18 });
+  const reveal10 = useScrollReveal({ opacity: 0, y: 10 });
   return (
     <section
       id="community-partners"
-      className="relative py-20 md:py-28 lg:py-32 overflow-hidden"
+      className="relative py-16 md:py-20 lg:py-24 overflow-hidden"
     >
       {/* Subtle top divider to visually separate from Sponsors */}
       <div className="absolute top-0 inset-x-0 h-px bg-white/[0.05]" />
@@ -68,10 +92,9 @@ export function CommunityPartners() {
           </span>
         </div>
 
-        {/* ── Heading — exact text from reference ── */}
+        {/* ── Heading ── */}
         <motion.h2
-          initial={{ opacity: 0, y: 18 }}
-          whileInView={{ opacity: 1, y: 0 }}
+          {...reveal18}
           viewport={{ once: true }}
           transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
           className="text-center text-3xl sm:text-4xl md:text-5xl font-extrabold text-white leading-tight tracking-tight mb-4"
@@ -79,28 +102,26 @@ export function CommunityPartners() {
           Friends across the ecosystem
         </motion.h2>
 
-        {/* ── Subtitle — "reach out" email line removed as requested ── */}
+        {/* ── Subtitle ── */}
         <motion.p
-          initial={{ opacity: 0, y: 10 }}
-          whileInView={{ opacity: 1, y: 0 }}
+          {...reveal10}
           viewport={{ once: true }}
           transition={{ duration: 0.5, delay: 0.1 }}
           className="text-center text-sm sm:text-base text-[#a1a1b2] mb-14 md:mb-16 max-w-lg mx-auto leading-relaxed"
         >
-          User groups and communities helping us spread the word. Want to be listed?
+          User groups and communities helping us spread the word.
         </motion.p>
 
-        {/* ── Partner logo grid — 3 columns ── */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 sm:gap-5">
-          {PARTNER_SLOTS.map((slot, i) => (
-            <PartnerTile key={slot.id} id={slot.id} index={i} />
+        {/* ── Partner logo grid — 2 cols mobile, 4 cols desktop ── */}
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-6 sm:gap-5">
+          {PARTNERS.map((partner, i) => (
+            <PartnerTile key={partner.name} partner={partner} index={i} />
           ))}
         </div>
 
-        {/* ── CTA — no email, just a contact nudge ── */}
+        {/* ── CTA ── */}
         <motion.p
-          initial={{ opacity: 0, y: 10 }}
-          whileInView={{ opacity: 1, y: 0 }}
+          {...reveal10}
           viewport={{ once: true }}
           transition={{ duration: 0.5, delay: 0.3 }}
           className="text-center text-sm text-[#7a7a8c] mt-12 md:mt-14"
@@ -117,3 +138,5 @@ export function CommunityPartners() {
     </section>
   );
 }
+
+export default CommunityPartners;

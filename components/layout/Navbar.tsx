@@ -8,7 +8,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Container } from "@/components/shared/Container";
 import { useSectionVisibility } from "@/hooks/useSectionVisibility";
-import { useReducedMotion } from "@/hooks/useReducedMotion";
+
 import { cn } from "@/lib/utils";
 
 const NAV_LINKS = [
@@ -24,7 +24,7 @@ const NAV_LINKS = [
 export function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const shouldReduceMotion = useReducedMotion();
+
 
   const activeSection = useSectionVisibility(
     NAV_LINKS.map((link) => link.id)
@@ -39,12 +39,9 @@ export function Navbar() {
   }, []);
 
   return (
-    <motion.header
-      initial={shouldReduceMotion ? {} : { y: -80, opacity: 0 }}
-      animate={{ y: 0, opacity: 1 }}
-      transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+    <header
       className={cn(
-        "fixed top-0 left-0 right-0 z-50 w-full transition-all duration-300 border-b border-transparent",
+        "fixed top-0 left-0 right-0 z-50 w-full transition-all duration-300 border-b border-transparent navbar-entrance",
         scrolled
           ? "glass-panel py-3"
           : "bg-transparent py-5"
@@ -142,6 +139,6 @@ export function Navbar() {
           </motion.div>
         )}
       </AnimatePresence>
-    </motion.header>
+    </header>
   );
 }

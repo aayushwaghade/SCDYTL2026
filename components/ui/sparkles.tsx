@@ -1,4 +1,6 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client"
+
 
 import { useId, useCallback } from "react"
 import Particles, { ParticlesProvider } from "@tsparticles/react"

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Sparkles as SparklesComp } from "@/components/ui/sparkles";
@@ -8,7 +8,6 @@ import { TimelineContent } from "@/components/ui/timeline-animation";
 import { VerticalCutReveal } from "@/components/ui/vertical-cut-reveal";
 import { cn } from "@/lib/utils";
 import NumberFlow from "@number-flow/react";
-
 
 const SHARED_BENEFITS = [
   "Pass includes:",
@@ -75,14 +74,14 @@ const PricingSwitch = ({ onSwitch }: { onSwitch: (value: string) => void }) => {
         <button
           onClick={() => handleSwitch("0")}
           className={cn(
-            "relative z-10 w-fit h-10 rounded-full sm:px-6 px-4 sm:py-2 py-1 font-medium transition-colors cursor-pointer",
+            "relative z-10 w-fit h-9 sm:h-10 rounded-full px-3 sm:px-6 text-xs sm:text-sm font-semibold transition-colors cursor-pointer",
             selected === "0" ? "text-near-black font-bold" : "text-gray-400",
           )}
         >
           {selected === "0" && (
             <motion.span
               layoutId={"switch"}
-              className="absolute top-0 left-0 h-10 w-full rounded-full border border-aws-orange/40 shadow-sm shadow-aws-orange/50 bg-gradient-to-t from-aws-orange to-aws-orange-light"
+              className="absolute top-0 left-0 h-full w-full rounded-full border border-aws-orange/40 shadow-sm shadow-aws-orange/50 bg-gradient-to-t from-aws-orange to-aws-orange-light"
               transition={{ type: "spring", stiffness: 500, damping: 30 }}
             />
           )}
@@ -92,18 +91,21 @@ const PricingSwitch = ({ onSwitch }: { onSwitch: (value: string) => void }) => {
         <button
           onClick={() => handleSwitch("1")}
           className={cn(
-            "relative z-10 w-fit h-10 flex-shrink-0 rounded-full sm:px-6 px-4 sm:py-2 py-1 font-medium transition-colors cursor-pointer",
+            "relative z-10 w-fit h-9 sm:h-10 flex-shrink-0 rounded-full px-3 sm:px-6 text-xs sm:text-sm font-semibold transition-colors cursor-pointer",
             selected === "1" ? "text-near-black font-bold" : "text-gray-400",
           )}
         >
           {selected === "1" && (
             <motion.span
               layoutId={"switch"}
-              className="absolute top-0 left-0 h-10 w-full rounded-full border border-aws-orange/40 shadow-sm shadow-aws-orange/50 bg-gradient-to-t from-aws-orange to-aws-orange-light"
+              className="absolute top-0 left-0 h-full w-full rounded-full border border-aws-orange/40 shadow-sm shadow-aws-orange/50 bg-gradient-to-t from-aws-orange to-aws-orange-light"
               transition={{ type: "spring", stiffness: 500, damping: 30 }}
             />
           )}
-          <span className="relative flex items-center gap-2">Group (3+ Attendees)</span>
+          <span className="relative flex items-center gap-2">
+            <span className="hidden sm:inline">Group (3+ Attendees)</span>
+            <span className="inline sm:hidden">Group (3+)</span>
+          </span>
         </button>
       </div>
     </div>
@@ -112,8 +114,9 @@ const PricingSwitch = ({ onSwitch }: { onSwitch: (value: string) => void }) => {
 
 export function Tickets() {
   const [isYearly, setIsYearly] = useState(false);
+  const [activeTicketIndex, setActiveTicketIndex] = useState(0);
   const pricingRef = useRef<HTMLDivElement>(null);
-
+  const carouselRef = useRef<HTMLDivElement>(null);
 
   const revealVariants = {
     visible: (i: number) => ({
@@ -137,17 +140,86 @@ export function Tickets() {
 
   const row1Plans = plans;
 
+  // Horizontal scroll observer to track snaps in mobile/tablet views
+  useEffect(() => {
+    const container = carouselRef.current;
+    if (!container) return;
+
+    const observerOptions = {
+      root: container,
+      rootMargin: "0px -40% 0px -40%", // Watch horizontal snap focus centers
+      threshold: 0,
+    };
+
+    const handleIntersection = (entries: IntersectionObserverEntry[]) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          const indexAttr = entry.target.getAttribute("data-index");
+          if (indexAttr !== null) {
+            setActiveTicketIndex(parseInt(indexAttr, 10));
+          }
+        }
+      });
+    };
+
+    const observer = new IntersectionObserver(handleIntersection, observerOptions);
+    const cards = container.querySelectorAll(".ticket-carousel-card");
+    cards.forEach((card) => observer.observe(card));
+
+    return () => {
+      observer.disconnect();
+    };
+  }, []);
+
+  // Keyboard navigation arrow scroll behavior
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === "ArrowLeft") {
+      e.preventDefault();
+      const prevIdx = Math.max(0, activeTicketIndex - 1);
+      scrollToCard(prevIdx);
+    } else if (e.key === "ArrowRight") {
+      e.preventDefault();
+      const nextIdx = Math.min(plans.length - 1, activeTicketIndex + 1);
+      scrollToCard(nextIdx);
+    }
+  };
+
+  const scrollToCard = (index: number) => {
+    const container = carouselRef.current;
+    if (!container) return;
+    const cards = container.querySelectorAll(".ticket-carousel-card");
+    const targetCard = cards[index] as HTMLElement;
+    if (targetCard) {
+      // Offset matches center snap align math with 5vw container padding
+      container.scrollTo({
+        left: targetCard.offsetLeft - container.clientWidth * 0.05,
+        behavior: "smooth",
+      });
+    }
+  };
+
   return (
     <div
       id="tickets"
-      className="min-h-screen mx-auto relative bg-[#040308] overflow-x-hidden py-16 scroll-mt-20"
+      className="mx-auto relative bg-[#040308] overflow-hidden pt-8 pb-12 scroll-mt-20"
       ref={pricingRef}
     >
+      {/* Self-contained styling */}
+      <style dangerouslySetInnerHTML={{ __html: `
+        .scrollbar-none::-webkit-scrollbar {
+          display: none;
+        }
+        .scrollbar-none {
+          -ms-overflow-style: none;
+          scrollbar-width: none;
+        }
+      `}} />
+
       <TimelineContent
         animationNum={5}
         timelineRef={pricingRef}
         customVariants={revealVariants}
-        className="absolute top-0 h-96 w-screen overflow-hidden [mask-image:radial-gradient(50%_50%,white,transparent)]"
+        className="absolute top-0 h-96 w-full overflow-hidden [mask-image:radial-gradient(50%_50%,white,transparent)]"
       >
         <div className="absolute bottom-0 left-0 right-0 top-0 bg-[linear-gradient(to_right,#ffffff1a_1px,transparent_1px),linear-gradient(to_bottom,#3a3a3a01_1px,transparent_1px)] bg-[size:70px_80px]"></div>
         <SparklesComp
@@ -178,7 +250,7 @@ export function Tickets() {
         </div>
       </TimelineContent>
 
-      <article className="text-center mb-12 pt-16 max-w-3xl mx-auto space-y-4 relative z-50">
+      <article className="text-center mb-8 pt-8 max-w-3xl mx-auto space-y-3 relative z-50 px-4">
         <h2 className="text-3xl md:text-5xl font-extrabold text-white leading-tight">
           <VerticalCutReveal
             splitBy="words"
@@ -202,7 +274,7 @@ export function Tickets() {
           animationNum={0}
           timelineRef={pricingRef}
           customVariants={revealVariants}
-          className="text-gray-400 text-sm md:text-base max-w-2xl mx-auto"
+          className="text-gray-400 text-xs sm:text-sm max-w-2xl mx-auto"
         >
           Choose the registration pass that fits your goals. Take advantage of group discounts by registering with friends!
         </TimelineContent>
@@ -212,7 +284,7 @@ export function Tickets() {
           animationNum={1}
           timelineRef={pricingRef}
           customVariants={revealVariants}
-          className="pt-2"
+          className="pt-1.5"
         >
           <PricingSwitch onSwitch={togglePricingPeriod} />
         </TimelineContent>
@@ -228,9 +300,10 @@ export function Tickets() {
         }}
       />
 
-      <div className="relative z-10 max-w-6xl mx-auto px-4">
-        {/* Grid (3 Cards) */}
-        <div className="grid md:grid-cols-3 gap-6 py-6 items-stretch">
+      <div className="relative z-10 max-w-6xl mx-auto px-4 lg:px-8">
+        
+        {/* ── Desktop Layout: Unchanged (>= 1024px) ── */}
+        <div className="hidden lg:grid lg:grid-cols-3 gap-6 py-6 items-stretch">
           {row1Plans.map((plan, index) => (
             <TimelineContent
               key={plan.name}
@@ -270,7 +343,6 @@ export function Tickets() {
                     <h3 className="text-2xl font-bold mb-2">{plan.name}</h3>
                   </div>
                   
-                  {/* Pricing with Original Price support */}
                   <div className="flex flex-col gap-1.5 my-3">
                     {plan.originalPrice && !isYearly && (
                       <div className="flex items-center gap-2">
@@ -340,6 +412,152 @@ export function Tickets() {
             </TimelineContent>
           ))}
         </div>
+
+        {/* ── Tablet/Mobile Layout: Horizontal Snap Carousel (< 1024px) ── */}
+        <div
+          ref={carouselRef}
+          onKeyDown={handleKeyDown}
+          tabIndex={0}
+          className="lg:hidden flex gap-4 overflow-x-auto snap-x snap-mandatory scrollbar-none py-6 scroll-smooth px-[5vw] outline-none focus-visible:ring-1 focus-visible:ring-purple-primary/50"
+          style={{ WebkitOverflowScrolling: "touch" }}
+          aria-label="Ticket pricing carousel. Use left and right arrow keys to navigate."
+        >
+          {row1Plans.map((plan, index) => {
+            const isActive = index === activeTicketIndex;
+            return (
+              <div
+                key={plan.name}
+                data-index={index}
+                className="ticket-carousel-card w-[90vw] md:w-[70vw] flex-shrink-0 snap-center h-[480px]"
+              >
+                <motion.div
+                  animate={{
+                    scale: isActive ? 1.0 : 0.93,
+                    opacity: isActive ? 1.0 : 0.75,
+                  }}
+                  transition={{ duration: 0.35, ease: "easeOut" }}
+                  className="h-full"
+                >
+                  <Card
+                    className={cn(
+                      "relative text-white border-neutral-800 bg-gradient-to-b from-neutral-900/90 to-neutral-950/95 h-full flex flex-col justify-between overflow-hidden rounded-2xl shadow-xl transition-all duration-300",
+                      plan.popular
+                        ? isActive
+                          ? "shadow-[0px_-13px_150px_0px_rgba(255,153,0,0.22)] border-aws-orange/45 z-20"
+                          : "shadow-[0px_-5px_50px_0px_rgba(255,153,0,0.08)] border-aws-orange/15 z-10"
+                        : plan.isProfessional
+                        ? isActive
+                          ? "border-purple-primary/45 shadow-[0px_-13px_150px_0px_rgba(139,92,246,0.22)] z-20"
+                          : "border-purple-primary/15 shadow-[0px_-5px_50px_0px_rgba(139,92,246,0.08)] z-10"
+                        : "z-10"
+                    )}
+                  >
+                    {plan.badge && (
+                      <div
+                        className={cn(
+                          "absolute top-3 right-3 px-3 py-1 text-[10px] font-bold rounded-full uppercase tracking-wider z-20",
+                          plan.popular
+                            ? "bg-aws-orange text-near-black"
+                            : plan.isProfessional
+                            ? "bg-purple-primary text-white"
+                            : "bg-neutral-800 text-gray-300 border border-neutral-700"
+                        )}
+                      >
+                        {plan.badge}
+                      </div>
+                    )}
+                    
+                    <CardHeader className="text-left p-5 pb-2">
+                      <h3 className="text-xl font-bold mb-1">{plan.name}</h3>
+                      
+                      <div className="flex flex-col gap-1 my-1">
+                        {plan.originalPrice && !isYearly && (
+                          <div className="flex items-center gap-2">
+                            <span className="text-xs line-through text-gray-500">
+                              ₹{plan.originalPrice}
+                            </span>
+                            <span className="text-[10px] font-bold text-emerald-400 bg-emerald-500/10 px-1.5 py-0.5 rounded">
+                              {plan.discountPercentage}% OFF
+                            </span>
+                          </div>
+                        )}
+                        <div className="flex items-baseline">
+                          <span className="text-3xl font-extrabold flex items-baseline">
+                            ₹
+                            <NumberFlow
+                              value={isYearly ? plan.yearlyPrice : plan.price}
+                              className="text-3xl font-extrabold"
+                            />
+                          </span>
+                          <span className="text-gray-400 ml-1 text-[10px]">
+                            /{isYearly ? "person (Group)" : "ticket"}
+                          </span>
+                        </div>
+                      </div>
+                      <p className="text-[11px] text-gray-400 leading-relaxed min-h-[30px]">{plan.description}</p>
+                    </CardHeader>
+
+                    <CardContent className="p-5 pt-0 flex-1 flex flex-col justify-between">
+                      <div>
+                        <a href="#register" className="block w-full">
+                          <button
+                            className={cn(
+                              "w-full py-3.5 text-xs font-bold rounded-xl transition-all duration-300 cursor-pointer",
+                              plan.popular
+                                ? "bg-gradient-to-t from-aws-orange to-aws-orange-light shadow-lg shadow-aws-orange/20 text-near-black hover:opacity-95"
+                                : plan.isProfessional
+                                ? "bg-gradient-to-t from-purple-primary to-indigo-primary shadow-lg shadow-purple-primary/20 text-white hover:opacity-95"
+                                : "bg-gradient-to-t from-neutral-950 to-neutral-800 border border-neutral-700 hover:border-neutral-600 text-white"
+                            )}
+                          >
+                            {plan.buttonText}
+                          </button>
+                        </a>
+
+                        <div className="space-y-2.5 pt-4 border-t border-neutral-800 mt-4">
+                          <h4 className="font-bold text-[10px] text-muted-foreground uppercase tracking-wider mb-2">
+                            {plan.includes[0]}
+                          </h4>
+                          <ul className="space-y-2">
+                            {plan.includes.slice(1, 7).map((feature, featureIndex) => (
+                              <li
+                                  key={featureIndex}
+                                  className="flex items-center gap-2 text-xs text-gray-300"
+                              >
+                                <span className={cn(
+                                  "h-1.5 w-1.5 rounded-full shrink-0",
+                                  plan.isProfessional ? "bg-purple-primary" : "bg-aws-orange"
+                                )}></span>
+                                <span className="truncate">{feature}</span>
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </motion.div>
+              </div>
+            );
+          })}
+        </div>
+
+        {/* ── Scroll Indicator Dots (Tablet/Mobile Only) ── */}
+        <div className="flex lg:hidden items-center justify-center gap-2 mt-4 select-none">
+          {plans.map((_, idx) => (
+            <button
+              key={idx}
+              onClick={() => scrollToCard(idx)}
+              className="h-1.5 rounded-full transition-all duration-300 cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-purple-primary/50"
+              style={{
+                width: idx === activeTicketIndex ? "16px" : "6px",
+                backgroundColor: idx === activeTicketIndex ? "#ff9900" : "rgba(255,255,255,0.2)",
+              }}
+              aria-label={`Go to ticket slide ${idx + 1}`}
+            />
+          ))}
+        </div>
+
       </div>
     </div>
   );

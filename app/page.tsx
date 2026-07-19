@@ -4,7 +4,6 @@ import { Footer } from "@/components/layout/Footer";
 import { BackgroundSystem } from "@/components/background/BackgroundSystem";
 import { Hero } from "@/components/sections/Hero";
 import { About } from "@/components/sections/About";
-import { HighlightsSection } from "@/components/sections/HighlightsSection";
 
 import { WhyAttend } from "@/components/sections/WhyAttend";
 import { Speakers } from "@/components/sections/Speakers";
@@ -24,13 +23,12 @@ export default function Home() {
       <main className="flex-1">
         <Hero />
         <About />
-        <HighlightsSection />
 
         <WhyAttend />
         <Speakers />
+        <Agenda />
         <Sponsors />
         <CommunityPartners />
-        <Agenda />
         <Tickets />
         <MeetTheTeam />
         {/* <Volunteers /> */}

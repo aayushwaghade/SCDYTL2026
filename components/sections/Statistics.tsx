@@ -18,7 +18,7 @@ export function Statistics() {
   return (
     <Section className="relative border-y border-white/[0.04] py-12 md:py-16 lg:py-20 overflow-hidden">
       {/* Subtle background glow */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[60rem] h-[15rem] rounded-full bg-purple-primary/5 blur-[120px] pointer-events-none z-0" />
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-[60rem] h-[15rem] rounded-full bg-purple-primary/5 blur-[120px] pointer-events-none z-0" />
       
       <Container className="relative z-10">
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6 text-center">

@@ -151,7 +151,7 @@ export function TicketCard({ ticket, delay = 0 }: TicketCardProps) {
         {/* Benefits list */}
         <div className="space-y-6 flex-1 flex flex-col justify-between">
           <div className="space-y-4">
-            <h4 className="text-xs font-bold text-muted-foreground uppercase tracking-wider">What's Included:</h4>
+            <h4 className="text-xs font-bold text-muted-foreground uppercase tracking-wider">What&apos;s Included:</h4>
             <ul className="space-y-2.5">
               {benefits.map((benefit, idx) => (
                 <motion.li

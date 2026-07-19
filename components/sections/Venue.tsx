@@ -9,7 +9,7 @@ export function Venue() {
     <Section id="venue" className="relative py-12 md:py-16 lg:py-20">
       {/* Background ambient glow */}
       <div 
-        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[350px] h-[350px] bg-aws-orange/5 blur-[100px] rounded-full pointer-events-none -z-10" 
+        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-[350px] aspect-square bg-aws-orange/5 blur-[100px] rounded-full pointer-events-none -z-10" 
       />
 
       <Container>

@@ -1,10 +1,10 @@
 export interface Speaker {
   id: string;
   name: string;
-  designation: string;
-  company: string;
-  sessionTitle: string;
-  sessionCategory: "Cloud" | "AI" | "DevOps" | "Security" | "Career" | "Frontend" | "Backend";
+  designation?: string;
+  company?: string;
+  sessionTitle?: string;
+  sessionCategory?: "Cloud" | "AI" | "DevOps" | "Security" | "Career" | "Frontend" | "Backend";
   image: string;
   linkedin?: string;
   twitter?: string;
@@ -13,119 +13,175 @@ export interface Speaker {
   displayOrder: number;
   bio?: string;
   sessionAbstract?: string;
+  
+  // Migrated source project fields
+  role?: string;
+  talkTitle?: string;
+  talkDescription?: string;
+  talkTime?: string;
+  isKeynote: boolean;
+  socials: {
+    linkedin?: string;
+    twitter?: string;
+    github?: string;
+    website?: string;
+  };
+}
+
+// Speaker image map — maps speaker names to their image filenames in /speakers/
+// This enables intelligent matching even when filenames differ slightly from names
+const SPEAKER_IMAGE_MAP: Record<string, string> = {
+  "Toshal Khawale": "Toshal Khawale.png",
+  "Ameya Vaidya": "Amey Vaidya.jpg",
+  "Akashdeep Thanda": "Akashdeep Thanda.png",
+  "Ashutosh Bhakare": "Ashutosh Bhakare.jpg",
+  "Anand Mehta": "Anand Mehta.jpg",
+  "Mohit Dharmadhikari": "Mohit Dharmadhikari.jpg",
+  "Jyoti Notani": "Jyoti Notani.jpg",
+  "Naresh Waswani": "Naresh Waswani.jpg",
+};
+
+function getSpeakerImage(name: string): string {
+  const filename = SPEAKER_IMAGE_MAP[name];
+  if (filename) {
+    return `/speakers/${encodeURIComponent(filename)}`;
+  }
+  // Fallback: default avatar (PersonSilhouette in ProfileCard handles missing images)
+  return "";
 }
 
 export const SPEAKERS: Speaker[] = [
   {
     id: "spk-1",
-    name: "Jigar Halani",
-    designation: "Sr. Director Of Enterprise Solutions Architecture & Engineering",
-    company: "NVIDIA South Asia",
-    sessionTitle: "Agentic AI & Super Agents: Next-Gen AI Infrastructure",
-    sessionCategory: "AI",
-    image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=400&q=80",
-    linkedin: "https://linkedin.com/in/jigarhalani",
+    name: "Toshal Khawale",
+    designation: "AWS Hero | Engineering Leader",
+    company: "JPMorgan Chase & Co.",
+    image: getSpeakerImage("Toshal Khawale"),
+    linkedin: "https://www.linkedin.com/in/toshal-khawale/",
     featured: true,
     displayOrder: 1,
-    bio: "Jigar Halani is the Senior Director – Solution Architect & Engineering at NVIDIA South Asia. With over 21 years of experience, he leads high-performance computing (HPC), AI infrastructure, and Generative AI (GenAI) solutions across the region, guiding enterprises and governments on token economics and deploying Sovereign AI.",
-    sessionAbstract: "Explore the evolution of autonomous AI systems from single-purpose tools to collaborative 'super agents.' This session breaks down the critical hardware infrastructure, model orchestration, and cost optimization strategies needed to deploy scalable, production-grade agentic workflows on NVIDIA platforms."
+    bio: "AWS Hero and technology leader with 22+ years of experience in engineering leadership, cloud transformation, and application modernization. Holds 12 AWS certifications and leads the AWS User Group Pune. Previously served as Managing Director at PwC.",
+    role: "AWS Hero | Engineering Leader",
+    isKeynote: false,
+    socials: {
+      linkedin: "https://www.linkedin.com/in/toshal-khawale/",
+      website: "https://sessionize.com/toshal-khawale",
+    },
   },
   {
     id: "spk-2",
-    name: "Arsh Goyal",
-    designation: "AI & Engineering Creator",
-    company: "ThoughtSpot",
-    sessionTitle: "Navigating an AI-Driven World: Thinking Beyond Coding",
-    sessionCategory: "Career",
-    image: "https://github.com/arshgoyal.png",
-    linkedin: "https://linkedin.com/in/arshgoyal",
+    name: "Ameya Vaidya",
+    designation: "Cloud & Information Security Leader",
+    company: "AWS Community Builder",
+    image: getSpeakerImage("Ameya Vaidya"),
+    linkedin: "https://www.linkedin.com/in/ameya-vaidya-9a164317/",
     featured: true,
     displayOrder: 2,
-    bio: "Arsh Goyal is an AI and engineering creator, developer advocate, and tech educator. A Gold Medalist from NIT Jalandhar, he has worked at Samsung and ISRO. He commands a large following on YouTube and LinkedIn (named a LinkedIn Top Voice), sharing knowledge on DSA, system design, and AI applications.",
-    sessionAbstract: "How does the role of a software developer evolve in the age of generative AI and coding agents? We'll examine the shifting paradigm of software engineering, strategies for developers to level up beyond writing syntax, and how to build high-impact products using AI APIs."
+    bio: "AWS Community Builder and leader of the AWS User Group Pune with 15+ years of expertise in cybersecurity, cloud infrastructure, and DevOps. Specializes in vulnerability management, cloud compliance, and secure architecture design. Frequent speaker and trainer at AWS Community Day events.",
+    role: "Cloud & Information Security Leader",
+    isKeynote: false,
+    socials: {
+      linkedin: "https://www.linkedin.com/in/ameya-vaidya-9a164317/",
+    },
   },
   {
     id: "spk-3",
-    name: "Tanu Garg",
-    designation: "AI Service Delivery Transformation Leader",
-    company: "EY GDS",
-    sessionTitle: "Embedding AI into Enterprise Service Delivery Operating Models",
-    sessionCategory: "AI",
-    image: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=400&q=80",
-    linkedin: "https://linkedin.com/in/tanu-garg-eygds",
+    name: "Akashdeep Thanda",
+    designation: "Tech Creator & Developer Influencer",
+    company: "Community Leader",
+    image: getSpeakerImage("Akashdeep Thanda"),
+    linkedin: "https://www.linkedin.com/in/akashthanda14/",
     featured: true,
     displayOrder: 3,
-    bio: "Tanu Garg is a Partner and AI Service Delivery Transformation Leader at EY Global Delivery Services (GDS). She has over 14 years of experience guiding financial institutions, risk groups, and compliance frameworks through AI-powered digital transformations and digital service delivery models.",
-    sessionAbstract: "An in-depth look at how large enterprises embed AI and automation directly into their service delivery pipelines. Tanu will share framework designs, risk mitigation policies, compliance guidelines, and organizational change strategies for scaling AI solutions safely."
+    bio: "Tech creator and developer influencer with a community of 150K+ Instagram followers and 145K+ tech community members. Specializes in DSA, MERN stack development, and inspiring the next generation of developers through content and public speaking.",
+    role: "Tech Creator & Developer Influencer",
+    isKeynote: false,
+    socials: {
+      linkedin: "https://www.linkedin.com/in/akashthanda14/",
+      website: "https://www.akashthanda.tech",
+    },
   },
   {
     id: "spk-4",
-    name: "Praful Bagai",
-    designation: "Head of Developer Relations – India & South Asia",
-    company: "AWS",
-    sessionTitle: "The Evolution of AI Systems: From GenAI to Agentic AI on AWS",
-    sessionCategory: "Cloud",
-    image: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=400&q=80",
-    linkedin: "https://linkedin.com/in/prafulbagai",
+    name: "Ashutosh Bhakare",
+    designation: "CEO & Docker Captain",
+    company: "Unnati Development & Training Centre",
+    image: getSpeakerImage("Ashutosh Bhakare"),
+    linkedin: "https://www.linkedin.com/in/abhakare/",
     featured: true,
     displayOrder: 4,
-    bio: "Praful Bagai is the Head of Developer Relations for India & South Asia at AWS. A seasoned engineering leader with background at Wayfair and Abnormal Security, he helps developers learn and leverage cloud-native services, GenAI architectures, and agentic integrations on AWS.",
-    sessionAbstract: "From simple text completion to complex, multi-step agentic execution. In this keynote, we will explore AWS Bedrock Agents, LangChain integrations, event-driven scaling using serverless workflows, and how to design stateful agentic systems in the cloud."
+    bio: "CEO of Unnati Development and Training Centre with nearly two decades of experience in Linux, Cloud Computing, DevOps, and open-source technologies. Red Hat Certified Instructor, SUSE Certified Instructor, Google Authorized Instructor, Docker Captain, and active Fedora Project contributor.",
+    role: "CEO & Docker Captain",
+    isKeynote: false,
+    socials: {
+      linkedin: "https://www.linkedin.com/in/abhakare/",
+      website: "https://unnatidevelopment.in",
+    },
   },
   {
     id: "spk-5",
-    name: "Ramprakash Ramamoorthy",
-    designation: "Director of AI Research",
-    company: "Zoho Corp",
-    sessionTitle: "The Power of Open-Weight Models in Enterprise AI",
-    sessionCategory: "AI",
-    image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&w=400&q=80",
-    linkedin: "https://linkedin.com/in/ramprakashr",
+    name: "Anand Mehta",
+    designation: "Senior FinOps & AI Specialist",
+    company: "Nasdaq",
+    image: getSpeakerImage("Anand Mehta"),
+    linkedin: "https://www.linkedin.com/in/anandmehtafinops/",
     featured: false,
     displayOrder: 5,
-    bio: "Ramprakash leads AI research and development at Zoho Corp, specializing in natural language processing, computer vision, and model deployment optimization. He is a strong advocate for open-weight model integration for cost and privacy efficiency.",
-    sessionAbstract: "Why open-weight models are changing the landscape of enterprise software. This session explores deploying Llama, Mistral, and local models on AWS EC2/SageMaker, optimizing inference speeds, and building self-hosted, private RAG pipelines."
+    bio: "Senior FinOps & AI Specialist at Nasdaq and AWS Community Builder. Multi-cloud certified hybrid solution enterprise architect and certified FinOps practitioner. Specializes in cloud cost optimization, AI-driven financial governance, and enterprise cloud economics.",
+    role: "Senior FinOps & AI Specialist",
+    isKeynote: false,
+    socials: {
+      linkedin: "https://www.linkedin.com/in/anandmehtafinops/",
+      website: "https://anandmehta.me",
+    },
   },
   {
     id: "spk-6",
-    name: "Kamesh Sampath",
-    designation: "Lead Developer Advocate",
-    company: "Snowflake",
-    sessionTitle: "Building Intelligent Applications with Snowflake and AWS",
-    sessionCategory: "DevOps",
-    image: "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&w=400&q=80",
-    linkedin: "https://linkedin.com/in/kamesh-sampath",
+    name: "Mohit Dharmadhikari",
+    designation: "Head of Engineering",
+    company: "Dentsu",
+    image: getSpeakerImage("Mohit Dharmadhikari"),
+    linkedin: "https://www.linkedin.com/in/mohitdharmadhikari/",
     featured: false,
     displayOrder: 6,
-    bio: "Kamesh is the Lead Developer Advocate at Snowflake. He focuses on data engineering, Kubernetes pipelines, and integration architectures, helping developers build secure data-intensive applications.",
-    sessionAbstract: "Learn how to build a unified data and AI app architecture. This session will show how to securely ingest data into Snowflake, apply LLM reasoning using Snowflake Cortex, and connect to AWS serverless APIs for downstream application integration."
+    bio: "Head of Engineering at Dentsu and experienced software architect with expertise in Cloud Computing (AWS, Azure, GCP), DevOps, containerization (Docker, Kubernetes), and software engineering. Active mentor, technical blogger, and YouTube creator (@voiddevops).",
+    role: "Head of Engineering",
+    isKeynote: false,
+    socials: {
+      linkedin: "https://www.linkedin.com/in/mohitdharmadhikari/",
+      website: "https://mohitdharmadhikari.com",
+    },
   },
   {
     id: "spk-7",
-    name: "Anupam Mishra",
-    designation: "Director of Developer Programs",
-    company: "AWS India & South Asia",
-    sessionTitle: "Scaling AWS Developer Communities and Ecosystems",
-    sessionCategory: "Cloud",
-    image: "https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&w=400&q=80",
-    linkedin: "https://linkedin.com/in/anupammishra",
+    name: "Jyoti Notani",
+    designation: "Architect",
+    company: "Persistent Systems",
+    image: getSpeakerImage("Jyoti Notani"),
+    linkedin: "https://www.linkedin.com/in/jyoti-notani-05780522/",
     featured: false,
     displayOrder: 7,
-    bio: "Anupam Mishra leads the AWS Developer Programs across India and South Asia, supporting community groups, user groups, and student builders in learning, building, and scaling their cloud-native skills.",
-    sessionAbstract: "A session detailing the programs, grants, and learning pathways available to students and developers in the AWS ecosystem. Learn how to leverage AWS User Groups, Community Builders, and local meetups to boost your cloud career."
+    bio: "Architect at Persistent Systems and organizer of the AWS User Group Nagpur. Expertise spans cloud architecture, AWS EKS security, and enterprise AI agent governance. Frequent speaker at AWS Community Day Bengaluru and other major tech events.",
+    role: "Architect",
+    isKeynote: false,
+    socials: {
+      linkedin: "https://www.linkedin.com/in/jyoti-notani-05780522/",
+    },
   },
   {
     id: "spk-8",
-    name: "Dale Vaz",
-    designation: "Founder & CEO, ex-CTO Swiggy",
-    company: "Sahi.com",
-    sessionTitle: "Lessons from Scaling Swiggy and Building the Future of Search",
-    sessionCategory: "Backend",
-    image: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80",
-    linkedin: "https://linkedin.com/in/dalevaz",
+    name: "Naresh Waswani",
+    designation: "Senior Architect",
+    company: "Simpplr Inc.",
+    image: getSpeakerImage("Naresh Waswani"),
+    linkedin: "https://www.linkedin.com/in/nwaswani/",
     featured: false,
     displayOrder: 8,
-    bio: "Dale Vaz is the founder and CEO of Sahi.com. He was previously the Chief Technology Officer (CTO) at Swiggy, where he scaled the technology stack to support millions of daily orders, and has also spent over 11 years leading engineering teams at Amazon.",
-    sessionAbstract: "Scale is both a feature and a challenge. Dale will share fundamental system design principles learned from leading Swiggy's massive growth, building hyper-scale microservices, and how AI is changing the landscape of search and discovery engines."
-  }
+    bio: "Senior Architect at Simpplr Inc. and AWS Community Builder. Specializes in AWS cloud migration, microservices architecture, event-driven architecture, Kubernetes, and DevOps. Leads the AWS User Group Nagpur and holds multiple AWS and Kubernetes certifications.",
+    role: "Senior Architect",
+    isKeynote: false,
+    socials: {
+      linkedin: "https://www.linkedin.com/in/nwaswani/",
+    },
+  },
 ];

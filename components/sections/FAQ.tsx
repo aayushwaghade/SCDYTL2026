@@ -40,7 +40,7 @@ export function FAQ() {
   };
 
   return (
-    <Section id="faq" className="relative">
+    <Section id="faq" className="relative py-12 md:py-16 lg:py-20">
       <Container>
         <SectionHeading
           title="Frequently Asked"

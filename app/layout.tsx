@@ -2,6 +2,8 @@ import type { Metadata, Viewport } from "next";
 import { Bai_Jamjuree } from "next/font/google";
 import { Providers } from "@/components/layout/Providers";
 import { Toaster } from "sonner";
+import { EVENT_CONFIG } from "@/lib/event";
+
 import "./globals.css";
 
 const baiJamjuree = Bai_Jamjuree({
@@ -19,7 +21,7 @@ export const viewport: Viewport = {
 
 export const metadata: Metadata = {
   title: "AWS Student Community Day Yavatmal 2026 | AWS  Student Builder Group JDIET",
-  description: "Register for AWS Student Community Day Yavatmal 2026 (SCD Yavatmal 2026). Hosted by AWS Student Builder Group JDIET & AWS Cloud Club JDIET on August 22, 2026. Join the premier student-led AWS Community Day Yavatmal cloud event in Vidarbha!",
+  description: `Register for AWS Student Community Day Yavatmal 2026 (SCD Yavatmal 2026). Hosted by AWS Student Builder Group JDIET & AWS Cloud Club JDIET on ${EVENT_CONFIG.fullDisplayDate}. Join the premier student-led AWS Community Day Yavatmal cloud event in Vidarbha!`,
   keywords: [
     "AWS Student Community Day",
     "AWS Student Community Day Yavatmal 2026",
@@ -61,7 +63,7 @@ export const metadata: Metadata = {
   },
   openGraph: {
     title: "AWS Student Community Day Yavatmal 2026 | AWS Cloud Club JDIET",
-    description: "Register for AWS Student Community Day Yavatmal 2026 (SCD Yavatmal 2026). Hosted by AWS Student Builder Group JDIET & AWS Cloud Club JDIET on August 22, 2026. Join the premier student-led AWS Community Day Yavatmal cloud event in Vidarbha!",
+    description: `Register for AWS Student Community Day Yavatmal 2026 (SCD Yavatmal 2026). Hosted by AWS Student Builder Group JDIET & AWS Cloud Club JDIET on ${EVENT_CONFIG.fullDisplayDate}. Join the premier student-led AWS Community Day Yavatmal cloud event in Vidarbha!`,
     url: "https://scdytl-2026.vercel.app",
     siteName: "AWS Student Community Day Yavatmal",
     images: [
@@ -78,7 +80,7 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "AWS Student Community Day Yavatmal 2026 | AWS Cloud Club JDIET",
-    description: "Register for AWS Student Community Day Yavatmal 2026 (SCD Yavatmal 2026). Hosted by AWS Student Builder Group JDIET & AWS Cloud Club JDIET on August 22, 2026. Join the premier student-led AWS Community Day Yavatmal cloud event in Vidarbha!",
+    description: `Register for AWS Student Community Day Yavatmal 2026 (SCD Yavatmal 2026). Hosted by AWS Student Builder Group JDIET & AWS Cloud Club JDIET on ${EVENT_CONFIG.fullDisplayDate}. Join the premier student-led AWS Community Day Yavatmal cloud event in Vidarbha!`,
     images: ["/logos/aws-logo.png"],
   },
   icons: {
@@ -115,8 +117,8 @@ export default function RootLayout({
               "@context": "https://schema.org",
               "@type": "Event",
               "name": "AWS Student Community Day Yavatmal (Yachtmar) 2026",
-              "startDate": "2026-08-22T09:00:00+05:30",
-              "endDate": "2026-08-22T18:00:00+05:30",
+              "startDate": EVENT_CONFIG.startDateISO,
+              "endDate": EVENT_CONFIG.endDateISO,
               "eventStatus": "https://schema.org/EventScheduled",
               "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
               "location": {

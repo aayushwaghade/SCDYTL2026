@@ -14,7 +14,7 @@ interface BackgroundSystemProps {
  */
 export function BackgroundSystem({ children }: BackgroundSystemProps) {
   return (
-    <div className="relative min-h-screen w-full text-foreground overflow-hidden">
+    <div className="relative min-h-dvh w-full text-foreground overflow-hidden">
       {/* Ambient aurora orbs — sit above Layer 1, below content */}
       <AuroraBackground />
 
@@ -22,7 +22,7 @@ export function BackgroundSystem({ children }: BackgroundSystemProps) {
       <NoiseOverlay />
 
       {/* Page Content (Layer 2 surfaces + section content) */}
-      <div className="relative z-10 w-full min-h-screen flex flex-col">
+      <div className="relative z-10 w-full min-h-dvh flex flex-col">
         {children}
       </div>
     </div>

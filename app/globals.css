@@ -191,3 +191,47 @@ html.lenis body {
   --gradient-color: #8350e8;
   --sparkles-color: #ffffff;
 }
+
+/* ─── Mobile Safety Net ─────────────────────────────────────────────────────
+   On touch/coarse-pointer devices, Framer Motion's IntersectionObserver-based
+   whileInView can fail to trigger, leaving elements at their initial opacity: 0.
+   This animation forces all motion.div elements to become visible after 2s,
+   acting as a fallback without affecting desktop behavior.
+   ──────────────────────────────────────────────────────────────────────────── */
+@keyframes force-visible {
+  to {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
+
+@media (pointer: coarse) {
+  [style*="opacity: 0"],
+  [style*="opacity:0"] {
+    animation: force-visible 0.5s ease forwards;
+    animation-delay: 2s;
+  }
+}
+
+/* Navbar slide-down entrance — pure CSS, no JS dependency */
+@keyframes navbar-slide-down {
+  from {
+    opacity: 0;
+    transform: translateY(-80px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.navbar-entrance {
+  animation: navbar-slide-down 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .navbar-entrance {
+    animation: none;
+  }
+}
+

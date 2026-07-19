@@ -1,7 +1,10 @@
-"use client";
+/* eslint-disable @typescript-eslint/no-explicit-any, @typescript-eslint/no-unused-vars */
+"use client"
+
 
 import React from "react";
 import { motion } from "framer-motion";
+import { useScrollReveal } from "@/hooks/useScrollReveal";
 
 interface TimelineContentProps {
   children: React.ReactNode;
@@ -24,6 +27,7 @@ export function TimelineContent({
 }: TimelineContentProps) {
   // Select the appropriate motion tag based on the 'as' prop
   const Component = (motion as any)[as as any] || motion.div;
+  const revealProps = useScrollReveal();
 
   const defaultVariants = {
     hidden: { opacity: 0, y: 20 },
@@ -32,11 +36,17 @@ export function TimelineContent({
 
   const variants = customVariants || defaultVariants;
 
+  // Merge default initial variant with the dynamic revealProps state (prevents duplicate initial prop error)
+  const motionProps = {
+    ...revealProps,
+    initial: revealProps.initial !== undefined ? revealProps.initial : "hidden",
+    whileInView: revealProps.whileInView !== undefined ? revealProps.whileInView : "visible",
+  };
+
   return (
     <Component
       variants={variants}
-      initial="hidden"
-      whileInView="visible"
+      {...motionProps}
       viewport={{ once: true, amount: 0.1 }}
       custom={animationNum}
       className={className}
@@ -46,3 +56,4 @@ export function TimelineContent({
     </Component>
   );
 }
+

@@ -6,6 +6,16 @@ import Lenis from "lenis";
 
 export function Providers({ children }: { children: React.ReactNode }) {
   useEffect(() => {
+    // Detect touch/mobile device to skip Lenis smooth scrolling (prevents touch conflict bugs on Android/iOS)
+    const isTouch = typeof window !== "undefined" && 
+      (window.matchMedia("(pointer: coarse)").matches || 
+       "ontouchstart" in window || 
+       navigator.maxTouchPoints > 0);
+
+    if (isTouch) {
+      return;
+    }
+
     // Initialize Lenis smooth scrolling
     const lenis = new Lenis({
       duration: 1.2,
