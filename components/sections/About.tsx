@@ -50,6 +50,10 @@ export function About() {
   const [isPaused, setIsPaused] = useState(false);
   const resumeTimerRef = useRef<NodeJS.Timeout | null>(null);
 
+  // Touch swipe gesture refs
+  const touchStartX = useRef<number | null>(null);
+  const touchEndX = useRef<number | null>(null);
+
   // Auto-play interval effect (2.8 seconds)
   useEffect(() => {
     if (isPaused || shouldReduceMotion) return;
@@ -63,6 +67,38 @@ export function About() {
   const handleInteraction = (action: () => void) => {
     setIsPaused(true);
     action();
+    if (resumeTimerRef.current) clearTimeout(resumeTimerRef.current);
+    resumeTimerRef.current = setTimeout(() => {
+      setIsPaused(false);
+    }, 2000);
+  };
+
+  // Touch handlers for mobile swipe
+  const handleTouchStart = (e: React.TouchEvent) => {
+    touchStartX.current = e.touches[0].clientX;
+    touchEndX.current = e.touches[0].clientX;
+    setIsPaused(true);
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    touchEndX.current = e.touches[0].clientX;
+  };
+
+  const handleTouchEnd = () => {
+    if (touchStartX.current !== null && touchEndX.current !== null) {
+      const deltaX = touchStartX.current - touchEndX.current;
+      const swipeThreshold = 35; // Natural small swipe threshold
+      if (deltaX > swipeThreshold) {
+        // Swiped Left -> Next slide
+        setCurrentSlide((prev) => (prev + 1) % SLIDES.length);
+      } else if (deltaX < -swipeThreshold) {
+        // Swiped Right -> Previous slide
+        setCurrentSlide((prev) => (prev - 1 + SLIDES.length) % SLIDES.length);
+      }
+    }
+    touchStartX.current = null;
+    touchEndX.current = null;
+
     if (resumeTimerRef.current) clearTimeout(resumeTimerRef.current);
     resumeTimerRef.current = setTimeout(() => {
       setIsPaused(false);
@@ -177,19 +213,20 @@ export function About() {
           <div
             tabIndex={0}
             onMouseEnter={() => setIsPaused(true)}
-            onMouseLeave={() => setIsPaused(false)}
-            onTouchStart={() => setIsPaused(true)}
-            onTouchEnd={() => {
+            onMouseLeave={() => {
               if (resumeTimerRef.current) clearTimeout(resumeTimerRef.current);
               resumeTimerRef.current = setTimeout(() => setIsPaused(false), 2000);
             }}
-            onFocus={() => setIsPaused(true)}
-            onBlur={() => setIsPaused(false)}
+            onTouchStart={handleTouchStart}
+            onTouchMove={handleTouchMove}
+            onTouchEnd={handleTouchEnd}
+            onTouchCancel={handleTouchEnd}
             onKeyDown={handleKeyDown}
-            className="w-full relative min-h-[220px] sm:min-h-[240px] md:min-h-[260px] bg-[#0d0d11]/80 backdrop-blur-md rounded-3xl border border-white/10 shadow-2xl p-6 sm:p-10 md:p-12 flex flex-col justify-between focus:outline-none focus:ring-1 focus:ring-aws-orange/40 transition-all duration-300"
+            style={{ touchAction: "pan-y" }}
+            className="w-full relative min-h-[220px] sm:min-h-[240px] md:min-h-[260px] bg-[#0d0d11]/80 backdrop-blur-md rounded-3xl border border-white/10 shadow-2xl p-6 sm:p-10 md:p-12 flex flex-col justify-between focus:outline-none focus:ring-1 focus:ring-aws-orange/40 transition-all duration-300 select-none cursor-grab active:cursor-grabbing"
           >
             {/* Slide content container */}
-            <div className="relative w-full flex-1 flex flex-col justify-center">
+            <div className="relative w-full flex-1 flex flex-col justify-center pointer-events-none">
               <AnimatePresence mode="wait">
                 <motion.div
                   key={currentSlide}
