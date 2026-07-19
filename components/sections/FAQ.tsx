@@ -4,7 +4,6 @@ import React, { useState } from "react";
 import { Container } from "@/components/shared/Container";
 import { Section } from "@/components/shared/Section";
 import { GlassCard } from "@/components/cards/GlassCard";
-import { Reveal } from "@/components/animations/Reveal";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Plus, Minus } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -53,7 +52,7 @@ export function FAQ() {
           {FAQS.map((faq, index) => {
             const isOpen = openIndex === index;
             return (
-              <Reveal key={faq.question} delay={0.05 * index}>
+              <div key={faq.question}>
                 <GlassCard
                   glowColor="purple"
                   hoverGlow={false}
@@ -82,7 +81,7 @@ export function FAQ() {
                     </div>
                   </div>
                 </GlassCard>
-              </Reveal>
+              </div>
             );
           })}
         </div>

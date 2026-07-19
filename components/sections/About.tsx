@@ -50,12 +50,12 @@ export function About() {
   const [isPaused, setIsPaused] = useState(false);
   const resumeTimerRef = useRef<NodeJS.Timeout | null>(null);
 
-  // Auto-play interval effect (1 second)
+  // Auto-play interval effect (2.8 seconds)
   useEffect(() => {
     if (isPaused || shouldReduceMotion) return;
     const interval = setInterval(() => {
       setCurrentSlide((prev) => (prev + 1) % SLIDES.length);
-    }, 1000);
+    }, 2800);
     return () => clearInterval(interval);
   }, [isPaused, shouldReduceMotion]);
 
