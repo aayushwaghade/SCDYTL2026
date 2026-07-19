@@ -195,6 +195,7 @@ export function ProfileCard({
               <img
                 src={image}
                 alt={name}
+                loading="lazy"
                 className="w-full h-full object-cover select-none pointer-events-none"
                 style={{ textIndent: "-9999px" }}
                 onError={() => setImgError(true)}

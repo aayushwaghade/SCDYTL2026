@@ -1,8 +1,7 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
-import Image from "next/image";
-import { motion } from "framer-motion";
+import React, { useState, useEffect, useRef } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 
 // ─── Sparkle particle positions (deterministic so SSR matches client) ──────────
@@ -18,7 +17,6 @@ const SPARKLES = [
 const SLIDES = [
   {
     id: "about-slide-jdiet",
-    image: "/images/Community Partners logos/SIPNA.jpg",
     title: "AWS Cloud Club JDIET",
     description:
       "A student-led group focused on building, deploying, and learning cloud computing at Jawaharlal Darda Institute of Engineering and Technology (JDIET) Yavatmal.",
@@ -26,7 +24,6 @@ const SLIDES = [
   },
   {
     id: "about-slide-yavatmal",
-    image: "/images/Community Partners logos/PRMIT.jpg",
     title: "First Student Day in Yavatmal",
     description:
       "Bringing standard cloud industry workshops, AWS certification path resources, and community networking directly to the students of Vidarbha.",
@@ -34,7 +31,6 @@ const SLIDES = [
   },
   {
     id: "about-slide-restart",
-    image: "/images/Community Partners logos/SIPNA.jpg",
     title: "AWS re/Start Initiative",
     description:
       "Guiding students through entry paths in Amazon Web Services cloud architecture, DevOps, and cloud-practitioner certification tracks.",
@@ -43,30 +39,42 @@ const SLIDES = [
 ];
 
 const basicVariants = {
-  hidden: { opacity: 0 },
-  visible: { opacity: 1 },
+  hidden: { opacity: 0, y: 8 },
+  visible: { opacity: 1, y: 0 },
+  exit: { opacity: 0, y: -8 },
 };
 
 export function About() {
   const shouldReduceMotion = useReducedMotion();
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
+  const resumeTimerRef = useRef<NodeJS.Timeout | null>(null);
 
-  // Auto-play interval effect (3 seconds)
+  // Auto-play interval effect (1 second)
   useEffect(() => {
     if (isPaused || shouldReduceMotion) return;
     const interval = setInterval(() => {
       setCurrentSlide((prev) => (prev + 1) % SLIDES.length);
-    }, 3000);
+    }, 1000);
     return () => clearInterval(interval);
   }, [isPaused, shouldReduceMotion]);
+
+  // Handle manual interaction with automatic resume
+  const handleInteraction = (action: () => void) => {
+    setIsPaused(true);
+    action();
+    if (resumeTimerRef.current) clearTimeout(resumeTimerRef.current);
+    resumeTimerRef.current = setTimeout(() => {
+      setIsPaused(false);
+    }, 2000);
+  };
 
   // Keyboard navigation support
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === "ArrowRight") {
-      setCurrentSlide((prev) => (prev + 1) % SLIDES.length);
+      handleInteraction(() => setCurrentSlide((prev) => (prev + 1) % SLIDES.length));
     } else if (e.key === "ArrowLeft") {
-      setCurrentSlide((prev) => (prev - 1 + SLIDES.length) % SLIDES.length);
+      handleInteraction(() => setCurrentSlide((prev) => (prev - 1 + SLIDES.length) % SLIDES.length));
     }
   };
 
@@ -152,133 +160,69 @@ export function About() {
       {/* ── Main content ───────────────────────────────────────────────── */}
       <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
         {/* Sub-label */}
-        <motion.p
-          initial={false}
-          variants={basicVariants}
-          animate="visible"
-          className="text-xs font-bold tracking-[0.25em] uppercase text-[#666680] mb-10 md:mb-12 text-center"
-        >
+        <p className="text-xs font-bold tracking-[0.25em] uppercase text-[#666680] mb-6 md:mb-8 text-center">
           AWS Student Community Day · Yavatmal 2026
-        </motion.p>
+        </p>
 
         {/* Heading */}
-        <motion.h2
-          initial={false}
-          variants={basicVariants}
-          animate="visible"
-          className="text-center font-black text-white uppercase leading-none tracking-[-0.03em] mb-16 md:mb-20"
-          style={{ fontSize: "clamp(3.5rem, 8vw, 6rem)" }}
+        <h2
+          className="text-center font-black text-white uppercase leading-none tracking-[-0.03em] mb-12 md:mb-16"
+          style={{ fontSize: "clamp(3rem, 7vw, 5.5rem)" }}
         >
           ABOUT
-        </motion.h2>
+        </h2>
 
-        {/* ── Desktop & Laptop Layout: Image-Based Storytelling Card ── */}
-        <div className="hidden md:block max-w-4xl mx-auto">
+        {/* ── Clean Glass Text-Only Rotating Storytelling Card (Desktop & Mobile) ── */}
+        <div className="max-w-3xl mx-auto px-2">
           <div
             tabIndex={0}
             onMouseEnter={() => setIsPaused(true)}
             onMouseLeave={() => setIsPaused(false)}
+            onTouchStart={() => setIsPaused(true)}
+            onTouchEnd={() => {
+              if (resumeTimerRef.current) clearTimeout(resumeTimerRef.current);
+              resumeTimerRef.current = setTimeout(() => setIsPaused(false), 2000);
+            }}
             onFocus={() => setIsPaused(true)}
             onBlur={() => setIsPaused(false)}
             onKeyDown={handleKeyDown}
-            className="w-full relative h-[380px] rounded-3xl overflow-hidden border border-white/10 shadow-2xl bg-zinc-950 focus:outline-none focus:ring-1 focus:ring-purple-primary/30"
+            className="w-full relative min-h-[220px] sm:min-h-[240px] md:min-h-[260px] bg-[#0d0d11]/80 backdrop-blur-md rounded-3xl border border-white/10 shadow-2xl p-6 sm:p-10 md:p-12 flex flex-col justify-between focus:outline-none focus:ring-1 focus:ring-aws-orange/40 transition-all duration-300"
           >
-            {/* Background images */}
-            {SLIDES.map((slide, idx) => (
-              <motion.div
-                key={slide.id}
-                initial={false}
-                variants={basicVariants}
-                animate="visible"
-                className="absolute inset-0 z-0 pointer-events-none transition-opacity duration-700"
-                style={{ opacity: idx === currentSlide ? 1 : 0 }}
-              >
-                <Image
-                  src={slide.image}
-                  alt={slide.title}
-                  fill
-                  className="object-cover object-center"
-                  sizes="896px"
-                  priority={idx === 0}
-                />
-              </motion.div>
-            ))}
-
-            {/* Dark premium gradient overlay */}
-            <div
-              aria-hidden="true"
-              className="absolute inset-0 bg-gradient-to-r from-black/95 via-black/75 to-black/30 z-10 pointer-events-none"
-            />
-
-            {/* Foreground content layout */}
-            <div className="absolute inset-0 p-12 md:p-16 flex flex-col justify-between z-20 text-left pointer-events-none">
-              <div className="relative w-full">
+            {/* Slide content container */}
+            <div className="relative w-full flex-1 flex flex-col justify-center">
+              <AnimatePresence mode="wait">
                 <motion.div
-                  initial={false}
-                  variants={basicVariants}
+                  key={currentSlide}
+                  initial="hidden"
                   animate="visible"
-                  className="flex flex-col gap-3 max-w-xl text-left transition-all duration-300"
+                  exit="exit"
+                  variants={basicVariants}
+                  transition={{ duration: 0.25, ease: "easeOut" }}
+                  className="flex flex-col items-center text-center gap-3 w-full"
                 >
-                  <span className="text-2xl select-none">{SLIDES[currentSlide].icon}</span>
-                  <h3 className="text-xl sm:text-2xl md:text-3xl font-black text-white select-none uppercase tracking-wide leading-none">
+                  <span className="text-3xl select-none">{SLIDES[currentSlide].icon}</span>
+                  <h3 className="text-lg sm:text-xl md:text-2xl font-black text-white select-none uppercase tracking-wide leading-tight">
                     {SLIDES[currentSlide].title}
                   </h3>
-                  <p className="text-[#e2e2ee] text-sm sm:text-base md:text-[17px] font-semibold leading-relaxed select-none mt-1">
+                  <p className="text-[#c8c8d4] text-xs sm:text-sm md:text-base font-medium leading-relaxed select-none max-w-xl">
                     {SLIDES[currentSlide].description}
                   </p>
                 </motion.div>
-              </div>
-
-              {/* Progress capsule indicators dot matrix */}
-              <div className="flex items-center gap-2 mt-4 select-none pointer-events-auto">
-                {SLIDES.map((_, idx) => (
-                  <button
-                    key={idx}
-                    onClick={() => setCurrentSlide(idx)}
-                    className="h-1.5 rounded-full transition-all duration-300 focus:outline-none cursor-pointer"
-                    style={{
-                      width: idx === currentSlide ? 20 : 6,
-                      backgroundColor: idx === currentSlide ? "#ff9900" : "rgba(255,255,255,0.35)",
-                    }}
-                    aria-label={`Go to slide ${idx + 1}`}
-                  />
-                ))}
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* ── Mobile Layout: Text-Only Rotating Storytelling Card ── */}
-        <div className="block md:hidden max-w-md mx-auto">
-          <div className="w-full relative min-h-[220px] bg-[#0d0d11]/80 backdrop-blur-md rounded-2xl border border-white/5 shadow-2xl p-8 flex flex-col justify-between">
-            {/* Rotating text content */}
-            <div className="relative w-full">
-              <motion.div
-                initial={false}
-                variants={basicVariants}
-                animate="visible"
-                className="flex flex-col gap-3 text-center transition-all duration-300"
-              >
-                <span className="text-2xl select-none">{SLIDES[currentSlide].icon}</span>
-                <h3 className="text-lg font-black text-white select-none uppercase tracking-wide leading-none">
-                  {SLIDES[currentSlide].title}
-                </h3>
-                <p className="text-[#c8c8d4] text-xs sm:text-sm font-medium leading-relaxed select-none">
-                  {SLIDES[currentSlide].description}
-                </p>
-              </motion.div>
+              </AnimatePresence>
             </div>
 
-            {/* Progress capsule indicators dot matrix */}
-            <div className="flex items-center justify-center gap-2 mt-6 select-none">
+            {/* Progress indicator dot matrix */}
+            <div className="flex items-center justify-center gap-2.5 mt-6 select-none pointer-events-auto">
               {SLIDES.map((_, idx) => (
-                <span
+                <button
                   key={idx}
-                  className="h-1 rounded-full transition-all duration-300"
+                  onClick={() => handleInteraction(() => setCurrentSlide(idx))}
+                  className="h-1.5 rounded-full transition-all duration-300 focus:outline-none cursor-pointer p-0 border-0"
                   style={{
-                    width: idx === currentSlide ? 16 : 4,
-                    backgroundColor: idx === currentSlide ? "#ff9900" : "rgba(255,255,255,0.2)",
+                    width: idx === currentSlide ? 24 : 8,
+                    backgroundColor: idx === currentSlide ? "#ff9900" : "rgba(255,255,255,0.25)",
                   }}
+                  aria-label={`Go to slide ${idx + 1}`}
                 />
               ))}
             </div>
@@ -286,26 +230,16 @@ export function About() {
         </div>
 
         {/* Organizer credit — secondary gray text */}
-        <motion.p
-          initial={false}
-          variants={basicVariants}
-          animate="visible"
-          className="text-xs sm:text-sm text-[#7a7a8c] leading-relaxed text-center mt-8 px-4 max-w-2xl mx-auto"
-        >
+        <p className="text-xs sm:text-sm text-[#7a7a8c] leading-relaxed text-center mt-8 px-4 max-w-2xl mx-auto">
           Proudly organized by the{" "}
           <span className="text-[#e5e5e5] font-semibold">
             AWS Student Builder Group, JDIET
           </span>{" "}
           — building a stronger student cloud community in Vidarbha.
-        </motion.p>
+        </p>
 
         {/* Bottom divider line */}
-        <motion.div
-          initial={false}
-          variants={basicVariants}
-          animate="visible"
-          className="mt-20 md:mt-28 h-px bg-white/8 max-w-4xl mx-auto origin-left transition-all duration-500"
-        />
+        <div className="mt-16 md:mt-24 h-px bg-white/8 max-w-4xl mx-auto origin-left" />
       </div>
     </section>
   );

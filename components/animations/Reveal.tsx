@@ -41,7 +41,7 @@ export function Reveal({
     if (forceVisible) return;
     const timer = setTimeout(() => {
       setForceVisible(true);
-    }, 1500);
+    }, 200);
     return () => clearTimeout(timer);
   }, [forceVisible]);
 

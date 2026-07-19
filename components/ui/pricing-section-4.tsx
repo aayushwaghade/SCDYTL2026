@@ -137,7 +137,7 @@ export default function PricingSection6() {
 
   return (
     <div
-      className="min-h-screen mx-auto relative bg-[#040308] overflow-x-hidden py-16"
+      className="relative mx-auto bg-[#040308] overflow-x-hidden py-12 md:py-16 lg:py-20"
       ref={pricingRef}
     >
       <TimelineContent
